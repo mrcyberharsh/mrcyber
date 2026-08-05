@@ -36,3 +36,274 @@
     <div class="footer">© 2026 MR BIO. All Rights Reserved.</div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MR BIO — Builder & Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b0b0b;
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ----- HERO / BACKGROUND ----- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            /* ---- REPLACE THIS URL WITH YOUR IMAGE ---- */
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80') no-repeat center center/cover;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(0,0,0,0.85) 0%, rgba(0,20,10,0.75) 100%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        /* ----- GLASS CARD ----- */
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 2.5rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+        }
+
+        /* ----- TYPOGRAPHY ----- */
+        .badge {
+            display: inline-block;
+            background: rgba(0, 255, 65, 0.12);
+            color: #00ff41;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            padding: 0.4rem 1.2rem;
+            border-radius: 100px;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 20%, #00ff41 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #888;
+            font-style: italic;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 1.2rem;
+            margin-top: 0.8rem;
+        }
+
+        /* ----- SECTIONS (info cards) ----- */
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2.8rem;
+            text-align: left;
+        }
+        .info-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1.8rem;
+            padding: 1.8rem 1.6rem;
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+        .info-card:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(0, 255, 65, 0.15);
+        }
+        .info-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00ff41;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .info-card p, .info-card li {
+            font-size: 0.95rem;
+            color: #bcbcbc;
+            line-height: 1.7;
+        }
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0;
+        }
+        .info-card ul li {
+            padding: 0.2rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .info-card ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ff41;
+            opacity: 0.7;
+        }
+
+        /* ----- CONTACT / SOCIAL ----- */
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .contact-links a {
+            color: #d0d0d0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.6rem 1.6rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+            transition: all 0.25s ease;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(4px);
+        }
+        .contact-links a:hover {
+            background: rgba(0, 255, 65, 0.08);
+            border-color: #00ff41;
+            color: #00ff41;
+            transform: translateY(-2px);
+        }
+
+        /* ----- DEVELOPER FOOTER ----- */
+        .developer {
+            margin-top: 2.8rem;
+            padding-top: 1.6rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+            color: #666;
+            letter-spacing: 0.02em;
+        }
+        .developer strong {
+            color: #00ff41;
+            font-weight: 500;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 640px) {
+            .glass {
+                padding: 2rem 1.2rem;
+                border-radius: 1.8rem;
+            }
+            .sections {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .contact-links a {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content glass">
+            <!-- BADGE -->
+            <div class="badge">✦ MR BIO — EST. 2026</div>
+
+            <!-- MAIN TITLE -->
+            <h1>MR BIO</h1>
+            <p class="subtitle">Builder &amp; Explorer</p>
+            <p class="tagline">"Complex ko simple. Simple ko powerful."</p>
+
+            <!-- INFO GRID -->
+            <div class="sections">
+                <!-- ABOUT -->
+                <div class="info-card">
+                    <h3>🧬 About</h3>
+                    <p>MR BIO is a builder working at the intersection of <strong style="color:#d0d0d0;">Biology, Cyber Security, and OSINT</strong>. Self-taught, 4+ years of OSINT experience, and currently building tools, compressing notes, and chasing OSCP.</p>
+                </div>
+
+                <!-- SKILLS -->
+                <div class="info-card">
+                    <h3>⚡ Skills</h3>
+                    <ul>
+                        <li>OSINT &amp; Metadata Forensics</li>
+                        <li>Kali Linux · Cisco · Wireshark</li>
+                        <li>Python · Bash · Scripting</li>
+                        <li>Bio-Cyber Fusion</li>
+                        <li>OPSEC · Digital Intelligence</li>
+                    </ul>
+                </div>
+
+                <!-- PROJECTS -->
+                <div class="info-card">
+                    <h3>🚀 Projects</h3>
+                    <ul>
+                        <li>MR BIO OSINT Tool (50+ platforms)</li>
+                        <li>NCERT Compressor (15 → 2 pages)</li>
+                        <li>Cyber Lab (Cisco, Kali, VMs)</li>
+                        <li>MR BIO Notes (Launch 2026)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CONTACT -->
+            <div class="contact-links">
+                <a href="https://github.com/mr-bio" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/mr-bio" target="_blank">LinkedIn</a>
+                <a href="mailto:mrbio.osint@zoho.com">Email</a>
+                <a href="https://mr-bio.github.io/mrbio-osint-tool" target="_blank">OSINT Tool</a>
+            </div>
+
+            <!-- DEVELOPER CREDIT -->
+            <div class="developer">
+                Developed by <strong>Harsh Saini</strong> · MR BIO · All rights reserved &copy; 2026
+            </div>
+        </div>
+    </section>
+</body>
+</html>
