@@ -1,300 +1,820 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="google-site-verification" content="87GiGbWxcJDhReNvh5NP9giUu5-JDyptMjXj1Q94ehY" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
-    <!-- ========== SEO META TAGS ========== -->
-    <title>MR HARSH — OSINT &amp; Technical Ops</title>
-    <meta name="description" content="MR HARSH is a technical operator specializing in OSINT, cyber security, and digital intelligence. Self-taught with 4+ years of experience. Building tools, mastering terminals, and operating at the intersection of data and defense." />
-    <meta name="keywords" content="OSINT, Cyber Security, Digital Intelligence, MR HARSH, HARRY, Kali Linux, Cisco, Wireshark, Python, Bash, Automation, OPSEC, Threat Intelligence, Metadata Forensics" />
-    <meta name="author" content="Harsh Saini" />
-    <meta name="robots" content="index, follow" />
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR CYBER — Unlock the Digital World with Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-raised:#0e130f;
+    --neon:#00ff41;
+    --neon-dim:rgba(0,255,65,0.35);
+    --neon-faint:rgba(0,255,65,0.12);
+    --text:#e6f5e9;
+    --text-dim:#8fa898;
+    --text-faint:#5c6e61;
+    --border:rgba(0,255,65,0.18);
+    --border-strong:rgba(0,255,65,0.4);
+    --glass:rgba(255,255,255,0.03);
+    --glass-hover:rgba(0,255,65,0.05);
+    --danger:#ff3b3b;
+    --font-mono:'JetBrains Mono', monospace;
+    --font-body:'Inter', sans-serif;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--neon);color:#000;}
 
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="MR HARSH — OSINT &amp; Technical Ops" />
-    <meta property="og:description" content="MR HARSH is a technical operator specializing in OSINT, cyber security, and digital intelligence. Self-taught with 4+ years of experience." />
-    <meta property="og:url" content="https://mr-bio.github.io/mr.osint/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MR HARSH — OSINT &amp; Technical Ops" />
+  /* background: matrix rain + grid + scanline */
+  #matrixCanvas{
+    position:fixed;inset:0;z-index:-4;
+    opacity:0.5;
+  }
+  .bg-vignette{
+    position:fixed;inset:0;z-index:-3;pointer-events:none;
+    background:radial-gradient(ellipse 90% 70% at 50% 0%, rgba(10,10,10,0) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.94) 100%);
+  }
+  .bg-grid{
+    position:fixed;inset:0;z-index:-2;
+    background-image:
+      linear-gradient(rgba(0,255,65,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.045) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+  .bg-scan{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,255,65,0.012) 3px, rgba(0,0,0,0) 4px);
+  }
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MR HARSH — OSINT &amp; Technical Ops" />
-    <meta name="twitter:description" content="MR HARSH is a technical operator specializing in OSINT, cyber security, and digital intelligence." />
+  /* header */
+  header{
+    position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 6vw;
+    background:rgba(10,10,10,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo{
+    font-family:var(--font-mono);font-weight:800;font-size:19px;
+    letter-spacing:1px;color:var(--neon);
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  nav ul{list-style:none;display:flex;gap:34px;}
+  nav a{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+    letter-spacing:0.5px;transition:color 0.2s;position:relative;
+  }
+  nav a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--neon);transition:width 0.25s;}
+  nav a:hover{color:var(--neon);}
+  nav a:hover::after{width:100%;}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+  .hamburger span{width:22px;height:2px;background:var(--neon);display:block;}
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  /* hero */
+  .hero{
+    min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:80px 6vw 60px;position:relative;
+  }
+  .hero-term{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-faint);
+    margin-bottom:22px;letter-spacing:0.5px;min-height:20px;
+  }
+  .hero-term .cursor{display:inline-block;width:8px;height:14px;background:var(--neon);margin-left:4px;animation:blink 1s step-end infinite;vertical-align:middle;}
+  @keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+  .hero h1{
+    font-family:var(--font-mono);font-weight:800;
+    font-size:clamp(48px,9vw,108px);letter-spacing:2px;
+    color:var(--text);
+    text-shadow:0 0 24px var(--neon-dim), 0 0 60px rgba(0,255,65,0.15);
+    margin-bottom:8px;
+  }
+  .hero h1 span{color:var(--neon);}
+  .hero .subtitle{
+    font-family:var(--font-mono);font-size:clamp(13px,2vw,17px);
+    color:var(--neon);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;
+  }
+  .hero .tagline{
+    font-size:17px;color:var(--text-dim);font-style:italic;margin-bottom:38px;
+  }
+  .cta-btn{
+    font-family:var(--font-mono);font-size:14px;letter-spacing:1px;
+    background:var(--neon-faint);color:var(--neon);
+    border:1px solid var(--border-strong);
+    padding:15px 34px;border-radius:6px;cursor:pointer;
+    transition:all 0.25s;display:inline-flex;align-items:center;gap:10px;
+  }
+  .cta-btn:hover{background:var(--neon);color:#000;box-shadow:0 0 30px var(--neon-dim);}
 
-    <style>
-        /* ----- RESET & BASE ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0b0b0b;
-            color: #e0e0e0;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+  /* section shell */
+  section{padding:90px 6vw;position:relative;}
+  .section-head{max-width:760px;margin:0 auto 50px;text-align:center;}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12px;color:var(--neon);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+  }
+  .section-title{font-family:var(--font-mono);font-size:clamp(26px,4vw,38px);font-weight:700;margin-bottom:10px;}
+  .section-sub{color:var(--text-dim);font-size:15px;}
 
-        /* ----- HERO / BACKGROUND ----- */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            /* ---- REPLACE THIS URL WITH YOUR IMAGE ---- */
-            background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&q=80') no-repeat center center/cover;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(145deg, rgba(0,0,0,0.88) 0%, rgba(0,10,5,0.80) 100%);
-            z-index: 1;
-        }
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-        }
+  /* tools grid */
+  .tools-grid{
+    max-width:1240px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;
+  }
+  .tool-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;backdrop-filter:blur(8px);transition:all 0.25s;
+  }
+  .tool-card:hover{border-color:var(--border-strong);background:var(--glass-hover);transform:translateY(-3px);}
+  .tool-card h3{font-family:var(--font-mono);color:var(--neon);font-size:16px;margin-bottom:6px;}
+  .tool-purpose{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .tool-card p{font-size:13.5px;color:var(--text-dim);}
 
-        /* ----- GLASS CARD ----- */
-        .glass {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 2.5rem;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .glass:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-        }
+  /* domains */
+  .search-wrap{max-width:520px;margin:0 auto 46px;position:relative;}
+  #domainSearch{
+    width:100%;padding:15px 20px 15px 46px;background:var(--glass);
+    border:1px solid var(--border);border-radius:8px;color:var(--text);
+    font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.2s;
+  }
+  #domainSearch:focus{border-color:var(--border-strong);}
+  #domainSearch::placeholder{color:var(--text-faint);}
+  .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-family:var(--font-mono);}
 
-        /* ----- TYPOGRAPHY ----- */
-        .badge {
-            display: inline-block;
-            background: rgba(0, 255, 65, 0.10);
-            color: #00ff41;
-            font-weight: 600;
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            padding: 0.4rem 1.4rem;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 255, 65, 0.15);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-        }
-        h1 {
-            font-size: clamp(3rem, 10vw, 5.5rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 20%, #00ff41 90%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.2rem;
-        }
-        .codename {
-            font-size: 1rem;
-            color: #00ff41;
-            font-weight: 400;
-            letter-spacing: 0.15em;
-            opacity: 0.7;
-            margin-bottom: 0.5rem;
-        }
-        .subtitle {
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.3rem;
-        }
-        .tagline {
-            font-size: 1.05rem;
-            color: #888;
-            font-style: italic;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding-top: 1.2rem;
-            margin-top: 0.8rem;
-        }
+  .domains-grid{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+  .domain-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;backdrop-filter:blur(8px);transition:border-color 0.2s;
+  }
+  .domain-card.open{border-color:var(--border-strong);}
+  .domain-head{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:22px 26px;cursor:pointer;user-select:none;
+  }
+  .domain-head:hover{background:var(--glass-hover);}
+  .domain-num{font-family:var(--font-mono);color:var(--text-faint);font-size:12px;min-width:24px;}
+  .domain-name{font-family:var(--font-mono);font-weight:700;font-size:16.5px;flex:1;}
+  .domain-desc-preview{font-size:13px;color:var(--text-dim);display:none;}
+  .chevron{color:var(--neon);font-family:var(--font-mono);font-size:16px;transition:transform 0.25s;}
+  .domain-card.open .chevron{transform:rotate(180deg);}
 
-        /* ----- SECTIONS (info cards) ----- */
-        .sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.8rem;
-            margin-top: 2.8rem;
-            text-align: left;
-        }
-        .info-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 1.8rem;
-            padding: 1.8rem 1.6rem;
-            transition: background 0.25s ease, border-color 0.25s ease;
-        }
-        .info-card:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(0, 255, 65, 0.15);
-        }
-        .info-card h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #00ff41;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-        .info-card p, .info-card li {
-            font-size: 0.92rem;
-            color: #bcbcbc;
-            line-height: 1.7;
-        }
-        .info-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0.4rem 0 0;
-        }
-        .info-card ul li {
-            padding: 0.15rem 0;
-            padding-left: 1.2rem;
-            position: relative;
-        }
-        .info-card ul li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #00ff41;
-            opacity: 0.6;
-        }
+  .domain-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+  .domain-card.open .domain-body{max-height:2400px;}
+  .domain-body-inner{padding:0 26px 30px;border-top:1px solid var(--border);}
+  .domain-desc{color:var(--text-dim);font-size:14px;margin:20px 0 26px;line-height:1.7;}
 
-        /* ----- CONTACT / SOCIAL ----- */
-        .contact-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        .contact-links a {
-            color: #d0d0d0;
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.6rem 1.6rem;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 100px;
-            transition: all 0.25s ease;
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(4px);
-        }
-        .contact-links a:hover {
-            background: rgba(0, 255, 65, 0.08);
-            border-color: #00ff41;
-            color: #00ff41;
-            transform: translateY(-2px);
-        }
+  .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;}
+  .guide-block h4{
+    font-family:var(--font-mono);font-size:11px;color:var(--neon);
+    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .guide-block ul{list-style:none;}
+  .guide-block li{
+    font-size:13px;color:var(--text-dim);padding:6px 0 6px 14px;
+    border-left:1px solid var(--border);margin-bottom:2px;
+  }
+  .guide-block li b{color:var(--text);font-weight:500;}
+  .guide-block .plain{font-size:13.5px;color:var(--text-dim);}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{
+    font-family:var(--font-mono);font-size:11px;color:var(--neon);
+    background:var(--neon-faint);border:1px solid var(--border);
+    padding:4px 10px;border-radius:20px;
+  }
+  .stat-pair{display:flex;gap:22px;margin-top:24px;padding-top:22px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .stat-pair .stat b{display:block;font-family:var(--font-mono);color:var(--neon);font-size:15px;}
+  .stat-pair .stat span{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;}
 
-        /* ----- DEVELOPER FOOTER ----- */
-        .developer {
-            margin-top: 2.8rem;
-            padding-top: 1.6rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.8rem;
-            color: #666;
-            letter-spacing: 0.02em;
-        }
-        .developer strong {
-            color: #00ff41;
-            font-weight: 500;
-        }
+  .no-results{text-align:center;color:var(--text-faint);font-family:var(--font-mono);font-size:13px;padding:40px 0;display:none;}
 
-        /* ----- RESPONSIVE ----- */
-        @media (max-width: 640px) {
-            .glass {
-                padding: 2rem 1.2rem;
-                border-radius: 1.8rem;
-            }
-            .sections {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-            .contact-links a {
-                padding: 0.5rem 1.2rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
+  /* about */
+  .about-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:36px;}
+  .about-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:16px;
+    padding:44px;backdrop-filter:blur(8px);
+  }
+  .about-name{font-family:var(--font-mono);font-size:24px;color:var(--neon);margin-bottom:14px;}
+  .about-desc{color:var(--text-dim);font-size:15px;line-height:1.8;margin-bottom:26px;}
+  .about-philosophy{
+    font-style:italic;color:var(--text);font-size:16px;border-left:2px solid var(--neon);
+    padding-left:16px;margin-bottom:26px;
+  }
+  .about-github{
+    font-family:var(--font-mono);font-size:13px;color:var(--neon);
+    border:1px solid var(--border-strong);padding:10px 18px;border-radius:6px;display:inline-block;
+    transition:all 0.2s;
+  }
+  .about-github:hover{background:var(--neon);color:#000;}
+
+  /* contact */
+  .contact-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  @media(max-width:760px){.contact-wrap{grid-template-columns:1fr;}}
+  .contact-info-item{margin-bottom:26px;}
+  .contact-info-item .label{font-family:var(--font-mono);font-size:11px;color:var(--neon);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+  .contact-info-item .value{font-size:14px;color:var(--text-dim);}
+  .social-row{display:flex;gap:14px;margin-top:10px;}
+  .social-row a{
+    font-family:var(--font-mono);font-size:12px;border:1px solid var(--border);
+    padding:8px 16px;border-radius:6px;color:var(--text-dim);transition:all 0.2s;
+  }
+  .social-row a:hover{color:var(--neon);border-color:var(--border-strong);}
+
+  form{display:flex;flex-direction:column;gap:14px;}
+  form input, form textarea{
+    background:var(--glass);border:1px solid var(--border);border-radius:8px;
+    padding:13px 16px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;
+    transition:border-color 0.2s;resize:none;
+  }
+  form input:focus, form textarea:focus{border-color:var(--border-strong);}
+  form textarea{min-height:110px;}
+  form button{
+    font-family:var(--font-mono);font-size:13px;letter-spacing:1px;
+    background:var(--neon);color:#000;border:none;padding:14px;border-radius:8px;
+    cursor:pointer;font-weight:700;transition:opacity 0.2s;
+  }
+  form button:hover{opacity:0.85;}
+  .form-note{font-size:12px;color:var(--text-faint);text-align:center;margin-top:2px;min-height:16px;}
+
+  footer{
+    text-align:center;padding:40px 6vw;border-top:1px solid var(--border);
+    font-family:var(--font-mono);font-size:12px;color:var(--text-faint);
+  }
+  footer .credit{margin-top:6px;}
+  footer .emails{margin-top:10px;color:var(--text-faint);}
+
+  @media(max-width:820px){
+    nav ul{display:none;}
+    .hamburger{display:flex;}
+    nav.open ul{
+      display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+      background:rgba(10,10,10,0.98);padding:20px 6vw;gap:18px;border-bottom:1px solid var(--border);
+    }
+    .contact-wrap{grid-template-columns:1fr;}
+  }
+</style>
 </head>
 <body>
-    <section class="hero">
-        <div class="hero-content glass">
-            <!-- BADGE -->
-            <div class="badge">✦ MR HARSH — CODENAME: HARRY</div>
 
-            <!-- MAIN TITLE -->
-            <h1>MR HARSH</h1>
-            <p class="codename">📡 Codename: HARRY</p>
-            <p class="subtitle">OSINT &amp; Technical Operations</p>
-            <p class="tagline">"Complex ko simple. Simple ko powerful."</p>
+<canvas id="matrixCanvas"></canvas>
+<div class="bg-grid"></div>
+<div class="bg-scan"></div>
+<div class="bg-vignette"></div>
 
-            <!-- INFO GRID -->
-            <div class="sections">
-                <!-- ABOUT -->
-                <div class="info-card">
-                    <h3>🧬 About</h3>
-                    <p>MR HARSH is a technical operator specializing in <strong style="color:#d0d0d0;">OSINT, cyber security, and digital intelligence</strong>. Self-taught with 4+ years of experience. Building tools, mastering terminals, and operating at the intersection of data and defense.</p>
-                </div>
+<header>
+  <div class="logo"><span class="dot"></span>MR CYBER</div>
+  <nav id="mainNav">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
 
-                <!-- SKILLS -->
-                <div class="info-card">
-                    <h3>⚡ Technical Arsenal</h3>
-                    <ul>
-                        <li>OSINT · Metadata Forensics</li>
-                        <li>Kali Linux · Cisco · Wireshark</li>
-                        <li>Python · Bash · Automation</li>
-                        <li>OPSEC · Threat Intelligence</li>
-                        <li>Live Attack Response</li>
-                    </ul>
-                </div>
+<section class="hero" id="home">
+  <div class="hero-term" id="heroTerm">&nbsp;<span class="cursor"></span></div>
+  <h1>MR <span>CYBER</span></h1>
+  <div class="subtitle">OSINT · Cybersecurity · Digital Intelligence</div>
+  <p class="tagline">"Complex ko simple. Simple ko powerful."</p>
+  <a href="#domains" class="cta-btn">Explore Domains →</a>
+</section>
 
-                <!-- PROJECTS -->
-                <div class="info-card">
-                    <h3>🚀 Operations</h3>
-                    <ul>
-                        <li>MR OSINT Tool (50+ platforms)</li>
-                        <li>Cyber Lab (Cisco, Kali, VMs)</li>
-                        <li>Technical Notes (Launch 2026)</li>
-                    </ul>
-                </div>
-            </div>
+<section id="tools">
+  <div class="section-head">
+    <div class="eyebrow">Arsenal</div>
+    <h2 class="section-title">OSINT &amp; Hacking Tools</h2>
+    <p class="section-sub">Sixteen tools that power reconnaissance, exploitation, and analysis.</p>
+  </div>
+  <div class="tools-grid" id="toolsGrid"></div>
+</section>
 
-            <!-- CONTACT -->
-            <div class="contact-links">
-                <a href="https://github.com/mr-bio" target="_blank">GitHub</a>
-                <a href="mailto:cyber.h4rsh@zohomail.in">Email</a>
-                <a href="https://mr-bio.github.io/mrbio-osint-tool" target="_blank">OSINT Tool</a>
-            </div>
+<section id="domains">
+  <div class="section-head">
+    <div class="eyebrow">Career Map</div>
+    <h2 class="section-title">Cybersecurity Domains — Complete Guide</h2>
+    <p class="section-sub">Click any domain to view its full guide: certifications, labs, tools, cost, career path, and more.</p>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">&gt;_</span>
+    <input type="text" id="domainSearch" placeholder="Search a domain — e.g. forensics, cloud, red team...">
+  </div>
+  <div class="domains-grid" id="domainsGrid"></div>
+  <p class="no-results" id="noResults">No domain matches that search.</p>
+</section>
 
-            <!-- DEVELOPER CREDIT -->
-            <div class="developer">
-                Codename: HARRY · Developed by <strong>Harsh Saini</strong> · All rights reserved &copy; 2026
-            </div>
+<section id="about">
+  <div class="section-head">
+    <div class="eyebrow">Operator</div>
+    <h2 class="section-title">About MR CYBER</h2>
+  </div>
+  <div class="about-wrap">
+    <div class="about-card">
+      <div class="about-name">Harsh Saini</div>
+      <p class="about-desc">A self-taught cybersecurity enthusiast and OSINT explorer with 4+ years of experience in digital intelligence, technical operations, and cybersecurity. Passionate about building tools, mastering terminals, and operating at the intersection of data and defense.</p>
+      <p class="about-philosophy">"Complex ko simple. Simple ko powerful."</p>
+      <div class="chip-row" style="margin-bottom:28px;">
+        <span class="chip">OSINT</span><span class="chip">Cybersecurity</span><span class="chip">Kali Linux</span>
+        <span class="chip">Cisco</span><span class="chip">Python</span><span class="chip">Bash</span>
+        <span class="chip">Wireshark</span><span class="chip">Network Security</span><span class="chip">Threat Intelligence</span>
+      </div>
+      <a href="https://github.com/mr-bio" class="about-github" target="_blank" rel="noopener">github.com/mr-bio →</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head">
+    <div class="eyebrow">Reach Out</div>
+    <h2 class="section-title">Contact MR CYBER</h2>
+  </div>
+  <div class="contact-wrap">
+    <div>
+      <div class="contact-info-item">
+        <div class="label">Developer Email</div>
+        <div class="value">mrbio.edu@zohomail.in</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="label">Manager Email</div>
+        <div class="value">manager.prachi@zohomail.in</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="label">Social</div>
+        <div class="social-row">
+          <a href="https://github.com/mr-bio" target="_blank" rel="noopener">GitHub</a>
+          <a href="#" target="_blank" rel="noopener">LinkedIn</a>
         </div>
-    </section>
+      </div>
+    </div>
+    <form id="contactForm">
+      <input type="text" id="cfName" placeholder="Name" required>
+      <input type="email" id="cfEmail" placeholder="Email" required>
+      <input type="text" id="cfSubject" placeholder="Subject" required>
+      <textarea id="cfMessage" placeholder="Message" required></textarea>
+      <button type="submit">Send message</button>
+      <div class="form-note" id="formNote"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 MR CYBER — All Rights Reserved</div>
+  <div class="credit">Designed by Harsh Saini</div>
+  <div class="emails">mrbio.edu@zohomail.in&nbsp;&nbsp;|&nbsp;&nbsp;manager.prachi@zohomail.in</div>
+</footer>
+
+<script>
+/* ---------- DATA ---------- */
+const TOOLS = [
+  {name:"Nmap", purpose:"Network Scanning", desc:"Discovers hosts, open ports, and services across a network to map the attack surface."},
+  {name:"Wireshark", purpose:"Packet Analysis", desc:"Captures and inspects live network traffic at the packet level for deep protocol analysis."},
+  {name:"Metasploit", purpose:"Exploitation Framework", desc:"A modular framework for developing, testing, and executing exploit code against targets."},
+  {name:"Burp Suite", purpose:"Web App Testing", desc:"Intercepts and manipulates web traffic to find and exploit application-layer vulnerabilities."},
+  {name:"theHarvester", purpose:"OSINT Gathering", desc:"Collects emails, subdomains, hosts, and names from public sources during recon."},
+  {name:"Sherlock", purpose:"Username OSINT", desc:"Hunts a username across hundreds of social platforms to map a person's digital footprint."},
+  {name:"PhoneInfoga", purpose:"Phone OSINT", desc:"Gathers information on phone numbers using free and open-source intelligence techniques."},
+  {name:"SpiderFoot", purpose:"Automated Recon", desc:"Automates OSINT collection across 200+ data sources for footprinting and threat intel."},
+  {name:"Recon-ng", purpose:"Recon Framework", desc:"A modular web reconnaissance framework built for efficient, database-backed OSINT."},
+  {name:"BeEF", purpose:"Browser Exploitation", desc:"Focuses on assessing the security posture of a target through the web browser."},
+  {name:"SET", purpose:"Social Engineering", desc:"The Social-Engineer Toolkit builds and automates human-focused attack simulations."},
+  {name:"Maltego", purpose:"Link Analysis", desc:"Visualizes relationships between people, domains, and infrastructure for OSINT investigations."},
+  {name:"Aircrack-ng", purpose:"Wireless Security", desc:"A suite for assessing Wi-Fi network security, from capture to key cracking."},
+  {name:"Hydra", purpose:"Credential Attacks", desc:"A fast, parallelized login cracker supporting numerous protocols and services."},
+  {name:"John the Ripper", purpose:"Password Cracking", desc:"Detects weak passwords by cracking hashes across many formats and algorithms."},
+  {name:"SQLmap", purpose:"SQL Injection", desc:"Automates the detection and exploitation of SQL injection flaws in web applications."},
+];
+
+const DOMAINS = [
+  {
+    name:"Ethical Hacking",
+    desc:"Learn to think like a hacker and protect systems by identifying vulnerabilities before malicious actors exploit them.",
+    certs:[
+      {n:"CEH (Certified Ethical Hacker)", c:"$950 – $1,199", t:"4–6 months"},
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"eJPT (eLearnSecurity Junior Penetration Tester)", c:"$200 – $300", t:"2–3 months"},
+    ],
+    labs:[
+      {n:"TryHackMe (50+ rooms)", c:"$10/month"},
+      {n:"Hack The Box (VIP)", c:"$14/month"},
+      {n:"VirtualBox/VMware Lab Setup", c:"Free"},
+      {n:"VulnHub practice machines", c:"Free"},
+    ],
+    tools:["Nmap","Metasploit","Burp Suite","Wireshark","John the Ripper","Hydra","SQLmap"],
+    cost:"₹50,000 – ₹2,00,000 ($600 – $2,500)",
+    time:"6–12 months",
+    career:"Penetration Tester → Senior Pentester → Security Consultant → Red Team Lead",
+    companies:"Banks, Government Agencies, IT Firms, Defense, Security Consulting",
+    skills:["Networking","Linux","Scripting","Problem Solving","Attention to Detail"],
+  },
+  {
+    name:"Penetration Testing",
+    desc:"Simulate real-world cyberattacks to identify and exploit vulnerabilities in networks, applications, and systems, providing actionable remediation.",
+    certs:[
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"GPEN (GIAC Penetration Tester)", c:"$8,000+", t:"6 months"},
+      {n:"eCPPT (eLearnSecurity Certified Professional Penetration Tester)", c:"$1,000+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"Hack The Box (Pro Labs)", c:"$30/month"},
+      {n:"TryHackMe (Premium)", c:"$10/month"},
+      {n:"Offensive Security Labs", c:"$1,749 (incl. lab access)"},
+    ],
+    tools:["Metasploit","Burp Suite","Nmap","Wireshark","Nessus","OpenVAS","Gobuster","ffuf"],
+    cost:"₹80,000 – ₹3,00,000 ($1,000 – $3,500)",
+    time:"3–6 months",
+    career:"Junior Pentester → Pentester → Senior Pentester → Lead Pentester → Principal Consultant",
+    companies:"Security Consulting Firms, Boutique Pentest Firms, Banks, IT Services",
+    skills:["Network Security","Web Application Security","Scripting","Report Writing","Communication"],
+  },
+  {
+    name:"SOC Analyst",
+    desc:"Monitor, detect, analyze, and respond to security incidents in real-time using SIEM tools and threat intelligence.",
+    certs:[
+      {n:"Security+ (CompTIA)", c:"$392", t:"2–3 months"},
+      {n:"CySA+ (CompTIA)", c:"$392", t:"3–4 months"},
+      {n:"CEH (Certified Ethical Hacker)", c:"$950 – $1,199", t:"4–6 months"},
+      {n:"GCIA (GIAC Certified Intrusion Analyst)", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"TryHackMe (SOC Level 1)", c:"$10/month"},
+      {n:"LetsDefend (SOC Simulator)", c:"$10 – $30/month"},
+      {n:"Blue Team Labs Online", c:"Free/Paid"},
+    ],
+    tools:["Splunk","ELK Stack","Wireshark","Snort","Zeek","TheHive","MISP","VirusTotal"],
+    cost:"₹30,000 – ₹1,50,000 ($400 – $1,800)",
+    time:"3–6 months",
+    career:"SOC Analyst L1 → L2 → L3 → SOC Lead → Security Manager",
+    companies:"MNCs, Banks, Service Providers, Government, MSSPs",
+    skills:["Log Analysis","Incident Response","Threat Intelligence","Communication","Teamwork"],
+  },
+  {
+    name:"Digital Forensics",
+    desc:"Investigate cybercrimes by recovering, analyzing, and preserving digital evidence from computers, mobile devices, and networks for legal proceedings.",
+    certs:[
+      {n:"CCFP (Certified Cyber Forensics Professional)", c:"$1,200+", t:"6–12 months"},
+      {n:"CFCE (Certified Forensic Computer Examiner)", c:"$2,000+", t:"6 months"},
+      {n:"EnCE (EnCase Certified Examiner)", c:"$3,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"FTK Imager & EnCase practice", c:"Free/Paid"},
+      {n:"Forensic Analysis Labs", c:"Paid"},
+      {n:"Cyber Forensics CTF Challenges", c:"Free"},
+    ],
+    tools:["FTK","EnCase","Autopsy","Wireshark","X-Ways","Volatility","dd","Guymager"],
+    cost:"₹60,000 – ₹2,50,000 ($700 – $3,000)",
+    time:"6–12 months",
+    career:"Junior Forensics Analyst → Forensics Investigator → Senior Forensics Consultant → Law Enforcement Specialist",
+    companies:"Law Enforcement, Consulting Firms, Defense, Banks, Legal Firms",
+    skills:["Attention to Detail","Analytical Thinking","Chain of Custody","Report Writing","Legal Knowledge"],
+  },
+  {
+    name:"OSINT Intelligence",
+    desc:"Gather, analyze, and interpret publicly available information to generate actionable intelligence for cybersecurity, investigations, and corporate security.",
+    certs:[
+      {n:"OSINT-201 (Open Source Intelligence)", c:"$500+", t:"3–6 months"},
+      {n:"OCLS (OSINT Certified Lead Specialist)", c:"$1,000+", t:"4–6 months"},
+      {n:"C|OSINT (Certified OSINT)", c:"$800+", t:"3–6 months"},
+    ],
+    labs:[
+      {n:"OSINT Framework practice", c:"Free"},
+      {n:"Geoint tool practice", c:"Free"},
+      {n:"OSINT CTF Challenges", c:"Free"},
+    ],
+    tools:["Sherlock","theHarvester","PhoneInfoga","SpiderFoot","Maltego","Recon-ng","Google Dorks","Shodan","Censys"],
+    cost:"₹40,000 – ₹1,80,000 ($500 – $2,200)",
+    time:"3–9 months",
+    career:"OSINT Analyst → Intelligence Analyst → Senior OSINT Lead → Intelligence Manager → OSINT Consultant",
+    companies:"Government, Defense, Corporate Intelligence, Media, Law Enforcement",
+    skills:["Analytical Thinking","OSINT Tools","Social Media Intelligence","Report Writing","Discretion"],
+  },
+  {
+    name:"Cloud Security",
+    desc:"Secure cloud infrastructures by implementing security controls, identity management, encryption, and monitoring for AWS, Azure, and GCP environments.",
+    certs:[
+      {n:"CCSK (Certificate of Cloud Security Knowledge)", c:"$395", t:"2–3 months"},
+      {n:"CCSP (Certified Cloud Security Professional)", c:"$599", t:"4–6 months"},
+      {n:"AWS Certified Security – Specialty", c:"$300", t:"3–4 months"},
+      {n:"Azure Security Engineer Associate", c:"$165", t:"3–4 months"},
+    ],
+    labs:[
+      {n:"AWS Free Tier Labs", c:"Free (limited)"},
+      {n:"Azure Free Account Labs", c:"Free (limited)"},
+      {n:"Cloud Security CTF Challenges", c:"Free/Paid"},
+    ],
+    tools:["AWS Security Hub","Azure Security Center","CloudTrail","CloudFormation","Prisma Cloud","Wiz","Orca Security"],
+    cost:"₹70,000 – ₹3,50,000 ($900 – $4,200)",
+    time:"6–12 months",
+    career:"Cloud Security Analyst → Cloud Security Engineer → Cloud Security Architect → Cloud Security Lead",
+    companies:"Cloud Providers, Tech Giants, Banks, Startups, Consulting Firms",
+    skills:["AWS/Azure/GCP","Networking","Linux","Scripting","Identity Management"],
+  },
+  {
+    name:"IoT Security",
+    desc:"Protect Internet of Things devices and networks by identifying vulnerabilities in embedded systems, communication protocols, and device firmware.",
+    certs:[
+      {n:"CISSP-ISSAP (Information Systems Security Architecture Professional)", c:"$1,200+", t:"6–12 months"},
+      {n:"GIAC GICSP (Global Industrial Cyber Security Professional)", c:"$8,000+", t:"6 months"},
+      {n:"IoT Security Certification (IEC 62443)", c:"$1,000+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"IoT Pentest Labs", c:"Paid"},
+      {n:"Embedded Security CTF Challenges", c:"Free/Paid"},
+      {n:"OpenWRT/DD-WRT practice", c:"Free"},
+    ],
+    tools:["Firmware Analysis Tools","JTAG/SWD Debuggers","Wireshark","Scapy","Burp Suite","IoT Inspector","Shodan"],
+    cost:"₹50,000 – ₹2,20,000 ($600 – $2,800)",
+    time:"6–12 months",
+    career:"IoT Security Analyst → IoT Security Engineer → IoT Security Architect → ICS/SCADA Specialist",
+    companies:"IoT Companies, Manufacturing, Healthcare, Automotive, Smart City Projects",
+    skills:["Embedded Systems","Wireless Protocols","Hardware Knowledge","Firmware Analysis","Reverse Engineering"],
+  },
+  {
+    name:"Red Teaming",
+    desc:"Simulate advanced, multi-layered cyberattacks to test an organization's detection and response capabilities using adversary tactics, techniques, and procedures.",
+    certs:[
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"OSCE (Offensive Security Certified Expert)", c:"$3,000+", t:"12–18 months"},
+      {n:"CREST Certified Red Team Professional", c:"$2,000+", t:"12 months"},
+      {n:"GPEN (GIAC Penetration Tester)", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"Hack The Box (Pro Labs)", c:"$30/month"},
+      {n:"Offensive Security Advanced Labs", c:"$3,000+ (incl. lab access)"},
+      {n:"Custom Red Team Lab Setup", c:"Free/Paid"},
+    ],
+    tools:["Cobalt Strike","Metasploit","Empire","BloodHound","Nmap","Burp Suite","Responder","Impacket"],
+    cost:"₹90,000 – ₹4,00,000 ($1,200 – $5,000)",
+    time:"12–18 months",
+    career:"Red Team Member → Red Team Lead → Red Team Manager → Principal Red Team Consultant",
+    companies:"Defense, Security Consulting, Banks, Government, Large Enterprises",
+    skills:["Advanced Exploitation","Evasion Techniques","Reporting","Communication","Problem Solving"],
+  },
+  {
+    name:"Threat Intelligence",
+    desc:"Analyze cyber threats, track adversary groups, and provide actionable intelligence to prevent attacks using frameworks like MITRE ATT&CK and STIX/TAXII.",
+    certs:[
+      {n:"CTIA (Certified Threat Intelligence Analyst)", c:"$800+", t:"4–6 months"},
+      {n:"GCTI (GIAC Cyber Threat Intelligence)", c:"$8,000+", t:"6 months"},
+      {n:"C|TIA (Certified Threat Intelligence Analyst)", c:"$900+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"Threat Intelligence Platforms (TIPs) practice", c:"Free/Paid"},
+      {n:"MITRE ATT&CK Framework practice", c:"Free"},
+      {n:"Cyber Threat Intelligence CTF Challenges", c:"Free"},
+    ],
+    tools:["MISP","TheHive","ThreatConnect","Recorded Future","VirusTotal","Shodan","Censys","Maltego"],
+    cost:"₹50,000 – ₹2,50,000 ($600 – $3,000)",
+    time:"6–12 months",
+    career:"Threat Intelligence Analyst → Senior TI Analyst → TI Lead → Director of Threat Intelligence",
+    companies:"Defense, Finance, Large Enterprises, Government, Security Firms",
+    skills:["Data Analysis","Report Writing","OSINT","Framework Knowledge","Communication"],
+  },
+  {
+    name:"Malware Analysis",
+    desc:"Reverse engineer and analyze malicious software to understand its behavior, capabilities, and origins, enabling effective detection and removal strategies.",
+    certs:[
+      {n:"GREM (GIAC Reverse Engineering Malware)", c:"$8,000+", t:"6–12 months"},
+      {n:"CMMC (Certified Malware Analysis Master)", c:"$1,500+", t:"6–12 months"},
+      {n:"SANS FOR610", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"REMnux environment", c:"Free"},
+      {n:"Malware Analysis Labs", c:"Free/Paid"},
+      {n:"CTF Malware Challenges", c:"Free"},
+    ],
+    tools:["IDA Pro","Ghidra","OllyDbg","x64dbg","Wireshark","Process Monitor","Regshot","API Monitor"],
+    cost:"₹70,000 – ₹3,00,000 ($900 – $3,500)",
+    time:"6–12 months",
+    career:"Malware Analyst → Senior Malware Analyst → Reverse Engineer → Lead Researcher",
+    companies:"Security Firms, Defense, Government, AV Companies, Consulting",
+    skills:["Assembly Language","Reverse Engineering","Debugging","Analytical Thinking","Report Writing"],
+  },
+  {
+    name:"Identity & Access Management (IAM)",
+    desc:"Secure identities and control access to resources using authentication, authorization, and identity lifecycle management across enterprise systems.",
+    certs:[
+      {n:"CIAM (Certified Identity and Access Manager)", c:"$1,000+", t:"4–6 months"},
+      {n:"CISSP-ISSAP", c:"$1,200+", t:"6–12 months"},
+      {n:"CISM (Certified Information Security Manager)", c:"$600+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"IAM platform practice (Okta, Azure AD)", c:"Free/Paid"},
+      {n:"Identity Management CTF Challenges", c:"Free"},
+    ],
+    tools:["Okta","Azure AD","SailPoint","CyberArk","BeyondTrust","Ping Identity","ForgeRock"],
+    cost:"₹40,000 – ₹2,00,000 ($500 – $2,500)",
+    time:"3–9 months",
+    career:"IAM Analyst → IAM Engineer → IAM Architect → IAM Lead → IAM Consultant",
+    companies:"Banks, IT Firms, Government, Healthcare, Large Enterprises",
+    skills:["Identity Management","Access Control","Authentication Protocols","Compliance","Communication"],
+  },
+  {
+    name:"Security Consulting",
+    desc:"Provide expert security advisory services, assess security posture, develop strategies, and guide organizations in implementing effective security programs.",
+    certs:[
+      {n:"CISSP (Certified Information Systems Security Professional)", c:"$750", t:"6–12 months"},
+      {n:"CISM (Certified Information Security Manager)", c:"$600", t:"4–6 months"},
+      {n:"CISA (Certified Information Systems Auditor)", c:"$575", t:"4–6 months"},
+      {n:"C|CISO (Certified Chief Information Security Officer)", c:"$2,000+", t:"12 months"},
+    ],
+    labs:[
+      {n:"Risk Management practice", c:"Free/Paid"},
+      {n:"Compliance Framework training (ISO 27001, NIST)", c:"Free/Paid"},
+      {n:"Enterprise Security Architecture Labs", c:"Paid"},
+    ],
+    tools:["GRC Platforms","Risk Assessment Tools","Security Frameworks","Compliance Tools"],
+    cost:"₹60,000 – ₹3,50,000 ($700 – $4,200)",
+    time:"6–18 months",
+    career:"Security Consultant → Senior Consultant → Principal Consultant → Director of Consulting → CISO",
+    companies:"Consulting Firms, Big 4, Boutique Firms, Banks, Enterprises",
+    skills:["Risk Management","Communication","Business Acumen","Compliance Knowledge","Leadership"],
+  },
+];
+
+/* ---------- RENDER TOOLS ---------- */
+const toolsGrid = document.getElementById('toolsGrid');
+toolsGrid.innerHTML = TOOLS.map(t => `
+  <div class="tool-card">
+    <h3>${t.name}</h3>
+    <div class="tool-purpose">${t.purpose}</div>
+    <p>${t.desc}</p>
+  </div>
+`).join('');
+
+/* ---------- RENDER DOMAINS ---------- */
+const domainsGrid = document.getElementById('domainsGrid');
+const noResults = document.getElementById('noResults');
+
+function renderDomains(list){
+  if(list.length === 0){
+    domainsGrid.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  noResults.style.display = 'none';
+  domainsGrid.innerHTML = list.map((d, i) => `
+    <div class="domain-card" data-idx="${d._idx}">
+      <div class="domain-head" data-toggle="${d._idx}">
+        <span class="domain-num">${String(d._idx + 1).padStart(2,'0')}</span>
+        <span class="domain-name">${d.name}</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="domain-body">
+        <div class="domain-body-inner">
+          <p class="domain-desc">${d.desc}</p>
+          <div class="guide-grid">
+            <div class="guide-block">
+              <h4>Certifications Required</h4>
+              <ul>${d.certs.map(c => `<li><b>${c.n}</b><br>${c.c} · ${c.t}</li>`).join('')}</ul>
+            </div>
+            <div class="guide-block">
+              <h4>Lab / Practical Training</h4>
+              <ul>${d.labs.map(l => `<li><b>${l.n}</b><br>${l.c}</li>`).join('')}</ul>
+            </div>
+            <div class="guide-block">
+              <h4>Tools Used</h4>
+              <div class="chip-row">${d.tools.map(t => `<span class="chip">${t}</span>`).join('')}</div>
+            </div>
+            <div class="guide-block">
+              <h4>Career Path</h4>
+              <p class="plain">${d.career}</p>
+            </div>
+            <div class="guide-block">
+              <h4>Top Companies Hiring</h4>
+              <p class="plain">${d.companies}</p>
+            </div>
+            <div class="guide-block">
+              <h4>Skills Required</h4>
+              <div class="chip-row">${d.skills.map(s => `<span class="chip">${s}</span>`).join('')}</div>
+            </div>
+          </div>
+          <div class="stat-pair">
+            <div class="stat"><b>${d.cost}</b><span>Estimated Total Cost</span></div>
+            <div class="stat"><b>${d.time}</b><span>Time Required</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+DOMAINS.forEach((d, i) => d._idx = i);
+renderDomains(DOMAINS);
+
+domainsGrid.addEventListener('click', (e) => {
+  const head = e.target.closest('.domain-head');
+  if(!head) return;
+  const card = head.closest('.domain-card');
+  card.classList.toggle('open');
+});
+
+/* search filter */
+document.getElementById('domainSearch').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = DOMAINS.filter(d =>
+    d.name.toLowerCase().includes(q) ||
+    d.desc.toLowerCase().includes(q) ||
+    d.skills.some(s => s.toLowerCase().includes(q))
+  );
+  renderDomains(filtered);
+});
+
+/* ---------- MATRIX RAIN BACKGROUND ---------- */
+(function(){
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  const glyphs = 'アイウエオカキクケコサシスセソ01アクセスOSINTHACKROOTADMIN$#@%&'.split('');
+  let cols, drops, w, h;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    cols = Math.floor(w / 18);
+    drops = new Array(cols).fill(0).map(() => Math.random() * -40);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw(){
+    ctx.fillStyle = 'rgba(10,10,10,0.14)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = '15px monospace';
+    for(let i = 0; i < cols; i++){
+      const text = glyphs[Math.floor(Math.random() * glyphs.length)];
+      const x = i * 18;
+      const y = drops[i] * 18;
+      const grad = ctx.createLinearGradient(0, y - 40, 0, y);
+      grad.addColorStop(0, 'rgba(0,255,65,0)');
+      grad.addColorStop(1, 'rgba(0,255,65,0.85)');
+      ctx.fillStyle = grad;
+      ctx.fillText(text, x, y);
+      if(y > h && Math.random() > 0.975){
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 55);
+})();
+
+/* ---------- HERO TERMINAL TYPE EFFECT ---------- */
+const heroTerm = document.getElementById('heroTerm');
+const termLine = '> initializing MR CYBER intelligence node...';
+let ti = 0;
+function typeTerm(){
+  if(ti <= termLine.length){
+    heroTerm.innerHTML = termLine.slice(0, ti) + '<span class="cursor"></span>';
+    ti++;
+    setTimeout(typeTerm, 32);
+  }
+}
+typeTerm();
+
+/* ---------- MOBILE NAV ---------- */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mainNav = document.getElementById('mainNav');
+hamburgerBtn.addEventListener('click', () => mainNav.classList.toggle('open'));
+mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mainNav.classList.remove('open')));
+
+/* ---------- CONTACT FORM (client-side only, no backend) ---------- */
+document.getElementById('contactForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  const name = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const subject = document.getElementById('cfSubject').value.trim();
+  const message = document.getElementById('cfMessage').value.trim();
+  if(!name || !email || !subject || !message){
+    note.style.color = 'var(--danger)';
+    note.textContent = 'Fill in every field before sending.';
+    return;
+  }
+  note.style.color = 'var(--neon)';
+  note.textContent = `Message ready — connect a backend or mail service to actually deliver this.`;
+  e.target.reset();
+});
+</script>
 </body>
 </html>
