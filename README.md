@@ -36,7 +36,7 @@ I don't chase fame — I chase patterns, logic, and building systems that last.
 **📩 For Direct Contact:**
 
 - **Email:** cyber.h4rsh@zohomail.in
-- **Website:** [mrcyberharsh.github.io](https://mrcyberharsh.github.io/)
+- **Website:** [mrcyberharsh.github.io](https://mrcyberharsh.github.io/mrcyber/)
 
 ---
 
