@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="google-site-verification" content="zsCw7rIKOXay0qfE4Na5axezZ6KmbzphYHQvUZ39Nz8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR CYBER — Unlock the Digital World with Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-raised:#0e130f;
+    --neon:#00ff41;
+    --neon-dim:rgba(0,255,65,0.35);
+    --neon-faint:rgba(0,255,65,0.12);
+    --text:#e6f5e9;
+    --text-dim:#8fa898;
+    --text-faint:#5c6e61;
+    --border:rgba(0,255,65,0.18);
+    --border-strong:rgba(0,255,65,0.4);
+    --glass:rgba(255,255,255,0.03);
+    --glass-hover:rgba(0,255,65,0.05);
+    --danger:#ff3b3b;
+    --font-mono:'JetBrains Mono', monospace;
+    --font-body:'Inter', sans-serif;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--neon);color:#000;}
+
+  /* background: matrix rain + grid + scanline */
+  #matrixCanvas{
+    position:fixed;inset:0;z-index:-4;
+    opacity:0.5;
+  }
+  .bg-vignette{
+    position:fixed;inset:0;z-index:-3;pointer-events:none;
+    background:radial-gradient(ellipse 90% 70% at 50% 0%, rgba(10,10,10,0) 0%, rgba(10,10,10,0.55) 55%, rgba(10,10,10,0.94) 100%);
+  }
+  .bg-grid{
+    position:fixed;inset:0;z-index:-2;
+    background-image:
+      linear-gradient(rgba(0,255,65,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.045) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+  .bg-scan{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,255,65,0.012) 3px, rgba(0,0,0,0) 4px);
+  }
+
+  /* header */
+  header{
+    position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 6vw;
+    background:rgba(10,10,10,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo{
+    font-family:var(--font-mono);font-weight:800;font-size:19px;
+    letter-spacing:1px;color:var(--neon);
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  nav ul{list-style:none;display:flex;gap:34px;}
+  nav a{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+    letter-spacing:0.5px;transition:color 0.2s;position:relative;
+  }
+  nav a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--neon);transition:width 0.25s;}
+  nav a:hover{color:var(--neon);}
+  nav a:hover::after{width:100%;}
+  .nav-link-btn{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+    letter-spacing:0.5px;transition:color 0.2s;position:relative;
+    background:none;border:none;padding:0;cursor:pointer;
+  }
+  .nav-link-btn::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--neon);transition:width 0.25s;}
+  .nav-link-btn:hover{color:var(--neon);}
+  .nav-link-btn:hover::after{width:100%;}
+  .nav-link-btn.active{color:var(--neon);}
+  .nav-link-btn.active::after{width:100%;}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+  .hamburger span{width:22px;height:2px;background:var(--neon);display:block;}
+
+  /* hero */
+  .hero{
+    min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:80px 6vw 60px;position:relative;
+  }
+  .hero-term{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-faint);
+    margin-bottom:22px;letter-spacing:0.5px;min-height:20px;
+  }
+  .hero-term .cursor{display:inline-block;width:8px;height:14px;background:var(--neon);margin-left:4px;animation:blink 1s step-end infinite;vertical-align:middle;}
+  @keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+  .hero h1{
+    font-family:var(--font-mono);font-weight:800;
+    font-size:clamp(48px,9vw,108px);letter-spacing:2px;
+    color:var(--text);
+    text-shadow:0 0 24px var(--neon-dim), 0 0 60px rgba(0,255,65,0.15);
+    margin-bottom:8px;
+  }
+  .hero h1 span{color:var(--neon);}
+  .hero .subtitle{
+    font-family:var(--font-mono);font-size:clamp(13px,2vw,17px);
+    color:var(--neon);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;
+  }
+  .hero .tagline{
+    font-size:17px;color:var(--text-dim);font-style:italic;margin-bottom:38px;
+  }
+  .cta-btn{
+    font-family:var(--font-mono);font-size:14px;letter-spacing:1px;
+    background:var(--neon-faint);color:var(--neon);
+    border:1px solid var(--border-strong);
+    padding:15px 34px;border-radius:6px;cursor:pointer;
+    transition:all 0.25s;display:inline-flex;align-items:center;gap:10px;
+  }
+  .cta-btn:hover{background:var(--neon);color:#000;box-shadow:0 0 30px var(--neon-dim);}
+
+  /* section shell */
+  section{padding:90px 6vw;position:relative;}
+  .section-head{max-width:760px;margin:0 auto 50px;text-align:center;}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12px;color:var(--neon);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+  }
+  .section-title{font-family:var(--font-mono);font-size:clamp(26px,4vw,38px);font-weight:700;margin-bottom:10px;}
+  .section-sub{color:var(--text-dim);font-size:15px;}
+
+  /* tools grid */
+  .tools-grid{
+    max-width:1240px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;
+  }
+  .tool-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;backdrop-filter:blur(8px);transition:all 0.25s;
+  }
+  .tool-card:hover{border-color:var(--border-strong);background:var(--glass-hover);transform:translateY(-3px);}
+  .tool-card h3{font-family:var(--font-mono);color:var(--neon);font-size:16px;margin-bottom:6px;}
+  .tool-purpose{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .tool-card p{font-size:13.5px;color:var(--text-dim);}
+
+  /* domains */
+  .search-wrap{max-width:520px;margin:0 auto 46px;position:relative;}
+  #domainSearch{
+    width:100%;padding:15px 20px 15px 46px;background:var(--glass);
+    border:1px solid var(--border);border-radius:8px;color:var(--text);
+    font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.2s;
+  }
+  #domainSearch:focus{border-color:var(--border-strong);}
+  #domainSearch::placeholder{color:var(--text-faint);}
+  .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-family:var(--font-mono);}
+
+  .domains-grid{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+  .domain-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;backdrop-filter:blur(8px);transition:border-color 0.2s;
+  }
+  .domain-card.open{border-color:var(--border-strong);}
+  .domain-head{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:22px 26px;cursor:pointer;user-select:none;
+  }
+  .domain-head:hover{background:var(--glass-hover);}
+  .domain-num{font-family:var(--font-mono);color:var(--text-faint);font-size:12px;min-width:24px;}
+  .domain-name{font-family:var(--font-mono);font-weight:700;font-size:16.5px;flex:1;}
+  .domain-desc-preview{font-size:13px;color:var(--text-dim);display:none;}
+  .chevron{color:var(--neon);font-family:var(--font-mono);font-size:16px;transition:transform 0.25s;}
+  .domain-card.open .chevron{transform:rotate(180deg);}
+
+  .domain-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+  .domain-card.open .domain-body{max-height:3600px;}
+  .domain-body-inner{padding:0 26px 30px;border-top:1px solid var(--border);}
+  .domain-desc{color:var(--text-dim);font-size:14px;margin:20px 0 26px;line-height:1.7;}
+
+  .guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;}
+  .guide-block h4{
+    font-family:var(--font-mono);font-size:11px;color:var(--neon);
+    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .guide-block ul{list-style:none;}
+  .guide-block li{
+    font-size:13px;color:var(--text-dim);padding:6px 0 6px 14px;
+    border-left:1px solid var(--border);margin-bottom:2px;
+  }
+  .guide-block li b{color:var(--text);font-weight:500;}
+  .guide-block .plain{font-size:13.5px;color:var(--text-dim);}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{
+    font-family:var(--font-mono);font-size:11px;color:var(--neon);
+    background:var(--neon-faint);border:1px solid var(--border);
+    padding:4px 10px;border-radius:20px;
+  }
+  .stat-pair{display:flex;gap:22px;margin-top:24px;padding-top:22px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .stat-pair .stat b{display:block;font-family:var(--font-mono);color:var(--neon);font-size:15px;}
+  .stat-pair .stat span{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;}
+
+  .no-results{text-align:center;color:var(--text-faint);font-family:var(--font-mono);font-size:13px;padding:40px 0;display:none;}
+
+  #networking{display:none;}
+  #networking.section-visible{display:block;animation:fadeIn 0.35s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+  .diagram-wrap{
+    background:rgba(0,255,65,0.035);border:1px solid var(--border);border-radius:10px;
+    padding:22px;margin-bottom:24px;overflow-x:auto;
+  }
+  .diagram-wrap svg{width:100%;height:auto;display:block;min-width:520px;}
+  .net-points{margin-top:6px;}
+
+  /* about */
+  .about-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:36px;}
+  .about-card{
+    background:var(--glass);border:1px solid var(--border);border-radius:16px;
+    padding:44px;backdrop-filter:blur(8px);
+  }
+  .about-name{font-family:var(--font-mono);font-size:24px;color:var(--neon);margin-bottom:14px;}
+  .about-desc{color:var(--text-dim);font-size:15px;line-height:1.8;margin-bottom:26px;}
+  .about-philosophy{
+    font-style:italic;color:var(--text);font-size:16px;border-left:2px solid var(--neon);
+    padding-left:16px;margin-bottom:26px;
+  }
+  .about-github{
+    font-family:var(--font-mono);font-size:13px;color:var(--neon);
+    border:1px solid var(--border-strong);padding:10px 18px;border-radius:6px;display:inline-block;
+    transition:all 0.2s;
+  }
+  .about-github:hover{background:var(--neon);color:#000;}
+
+  /* contact */
+  .contact-wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  @media(max-width:760px){.contact-wrap{grid-template-columns:1fr;}}
+  .contact-info-item{margin-bottom:26px;}
+  .contact-info-item .label{font-family:var(--font-mono);font-size:11px;color:var(--neon);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+  .contact-info-item .value{font-size:14px;color:var(--text-dim);}
+  .social-row{display:flex;gap:14px;margin-top:10px;}
+  .social-row a{
+    font-family:var(--font-mono);font-size:12px;border:1px solid var(--border);
+    padding:8px 16px;border-radius:6px;color:var(--text-dim);transition:all 0.2s;
+  }
+  .social-row a:hover{color:var(--neon);border-color:var(--border-strong);}
+
+  form{display:flex;flex-direction:column;gap:14px;}
+  form input, form textarea{
+    background:var(--glass);border:1px solid var(--border);border-radius:8px;
+    padding:13px 16px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;
+    transition:border-color 0.2s;resize:none;
+  }
+  form input:focus, form textarea:focus{border-color:var(--border-strong);}
+  form textarea{min-height:110px;}
+  form button{
+    font-family:var(--font-mono);font-size:13px;letter-spacing:1px;
+    background:var(--neon);color:#000;border:none;padding:14px;border-radius:8px;
+    cursor:pointer;font-weight:700;transition:opacity 0.2s;
+  }
+  form button:hover{opacity:0.85;}
+  .form-note{font-size:12px;color:var(--text-faint);text-align:center;margin-top:2px;min-height:16px;}
+
+  footer{
+    text-align:center;padding:40px 6vw;border-top:1px solid var(--border);
+    font-family:var(--font-mono);font-size:12px;color:var(--text-faint);
+  }
+  footer .credit{margin-top:6px;}
+  footer .emails{margin-top:10px;color:var(--text-faint);}
+
+  @media(max-width:820px){
+    nav ul{display:none;}
+    .hamburger{display:flex;}
+    nav.open ul{
+      display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+      background:rgba(10,10,10,0.98);padding:20px 6vw;gap:18px;border-bottom:1px solid var(--border);
+    }
+    .contact-wrap{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+<div class="bg-grid"></div>
+<div class="bg-scan"></div>
+<div class="bg-vignette"></div>
+
+<header>
+  <div class="logo"><span class="dot"></span>MR CYBER</div>
+  <nav id="mainNav">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><button type="button" id="navNetworking" class="nav-link-btn">Networking</button></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-term" id="heroTerm">&nbsp;<span class="cursor"></span></div>
+  <h1>MR <span>CYBER</span></h1>
+  <div class="subtitle">OSINT · Cybersecurity · Digital Intelligence</div>
+  <p class="tagline">"Complex ko simple. Simple ko powerful."</p>
+  <a href="#domains" class="cta-btn">Explore Domains →</a>
+</section>
+
+<section id="tools">
+  <div class="section-head">
+    <div class="eyebrow">Arsenal</div>
+    <h2 class="section-title">OSINT &amp; Hacking Tools</h2>
+    <p class="section-sub">Sixteen tools that power reconnaissance, exploitation, and analysis.</p>
+  </div>
+  <div class="tools-grid" id="toolsGrid"></div>
+</section>
+
+<section id="networking">
+  <div class="section-head">
+    <div class="eyebrow">Foundations</div>
+    <h2 class="section-title">Networking Concepts for Cybersecurity</h2>
+    <p class="section-sub">Every domain above builds on these fundamentals. Click a concept to expand its diagram and breakdown.</p>
+    <button id="closeNetworking" class="cta-btn" style="margin-top:20px;font-size:12px;padding:10px 22px;">Hide Networking ↑</button>
+  </div>
+  <div class="domains-grid" id="networkingGrid"></div>
+</section>
+
+<section id="domains">
+  <div class="section-head">
+    <div class="eyebrow">Career Map</div>
+    <h2 class="section-title">Cybersecurity Domains — Complete Guide</h2>
+    <p class="section-sub">Click any domain to view its full guide: certifications, labs, tools, cost, career path, and more.</p>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">&gt;_</span>
+    <input type="text" id="domainSearch" placeholder="Search a domain — e.g. forensics, cloud, red team...">
+  </div>
+  <div class="domains-grid" id="domainsGrid"></div>
+  <p class="no-results" id="noResults">No domain matches that search.</p>
+</section>
+
+<section id="about">
+  <div class="section-head">
+    <div class="eyebrow">Operator</div>
+    <h2 class="section-title">About MR CYBER</h2>
+  </div>
+  <div class="about-wrap">
+    <div class="about-card">
+      <div class="about-name">Harsh Saini</div>
+      <p class="about-desc">A self-taught cybersecurity enthusiast and OSINT explorer with 4+ years of experience in digital intelligence, technical operations, and cybersecurity. Passionate about building tools, mastering terminals, and operating at the intersection of data and defense.</p>
+      <p class="about-philosophy">"Complex ko simple. Simple ko powerful."</p>
+      <div class="chip-row" style="margin-bottom:28px;">
+        <span class="chip">OSINT</span><span class="chip">Cybersecurity</span><span class="chip">Kali Linux</span>
+        <span class="chip">Cisco</span><span class="chip">Python</span><span class="chip">Bash</span>
+        <span class="chip">Wireshark</span><span class="chip">Network Security</span><span class="chip">Threat Intelligence</span>
+      </div>
+      <a href="https://github.com/mr-bio" class="about-github" target="_blank" rel="noopener">github.com/mr-bio →</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head">
+    <div class="eyebrow">Reach Out</div>
+    <h2 class="section-title">Contact MR CYBER</h2>
+  </div>
+  <div class="contact-wrap">
+    <div>
+      <div class="contact-info-item">
+        <div class="label">Developer Email</div>
+        <div class="value">cyber.h4rsh@zohomail.in</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="label">Manager Email</div>
+        <div class="value">manager.prachi@zohomail.in</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="label">Social</div>
+        <div class="social-row">
+          <a href="https://github.com/mr-bio" target="_blank" rel="noopener">GitHub</a>
+          <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <form id="contactForm">
+      <input type="text" id="cfName" placeholder="Name" required>
+      <input type="email" id="cfEmail" placeholder="Email" required>
+      <input type="text" id="cfSubject" placeholder="Subject" required>
+      <textarea id="cfMessage" placeholder="Message" required></textarea>
+      <button type="submit">Send message</button>
+      <div class="form-note" id="formNote"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 MR CYBER — All Rights Reserved</div>
+  <div class="credit">Designed by Harsh Saini</div>
+  <div class="emails">mrbio.edu@zohomail.in&nbsp;&nbsp;|&nbsp;&nbsp;manager.prachi@zohomail.in</div>
+</footer>
+
+<script>
+/* ---------- DATA ---------- */
+const TOOLS = [
+  {name:"Nmap", purpose:"Network Scanning", desc:"Discovers hosts, open ports, and services across a network to map the attack surface."},
+  {name:"Wireshark", purpose:"Packet Analysis", desc:"Captures and inspects live network traffic at the packet level for deep protocol analysis."},
+  {name:"Metasploit", purpose:"Exploitation Framework", desc:"A modular framework for developing, testing, and executing exploit code against targets."},
+  {name:"Burp Suite", purpose:"Web App Testing", desc:"Intercepts and manipulates web traffic to find and exploit application-layer vulnerabilities."},
+  {name:"theHarvester", purpose:"OSINT Gathering", desc:"Collects emails, subdomains, hosts, and names from public sources during recon."},
+  {name:"Sherlock", purpose:"Username OSINT", desc:"Hunts a username across hundreds of social platforms to map a person's digital footprint."},
+  {name:"PhoneInfoga", purpose:"Phone OSINT", desc:"Gathers information on phone numbers using free and open-source intelligence techniques."},
+  {name:"SpiderFoot", purpose:"Automated Recon", desc:"Automates OSINT collection across 200+ data sources for footprinting and threat intel."},
+  {name:"Recon-ng", purpose:"Recon Framework", desc:"A modular web reconnaissance framework built for efficient, database-backed OSINT."},
+  {name:"BeEF", purpose:"Browser Exploitation", desc:"Focuses on assessing the security posture of a target through the web browser."},
+  {name:"SET", purpose:"Social Engineering", desc:"The Social-Engineer Toolkit builds and automates human-focused attack simulations."},
+  {name:"Maltego", purpose:"Link Analysis", desc:"Visualizes relationships between people, domains, and infrastructure for OSINT investigations."},
+  {name:"Aircrack-ng", purpose:"Wireless Security", desc:"A suite for assessing Wi-Fi network security, from capture to key cracking."},
+  {name:"Hydra", purpose:"Credential Attacks", desc:"A fast, parallelized login cracker supporting numerous protocols and services."},
+  {name:"John the Ripper", purpose:"Password Cracking", desc:"Detects weak passwords by cracking hashes across many formats and algorithms."},
+  {name:"SQLmap", purpose:"SQL Injection", desc:"Automates the detection and exploitation of SQL injection flaws in web applications."},
+];
+
+const DOMAINS = [
+  {
+    name:"Ethical Hacking",
+    desc:"Learn to think like a hacker and protect systems by identifying vulnerabilities before malicious actors exploit them.",
+    certs:[
+      {n:"CEH (Certified Ethical Hacker)", c:"$950 – $1,199", t:"4–6 months"},
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"eJPT (eLearnSecurity Junior Penetration Tester)", c:"$200 – $300", t:"2–3 months"},
+    ],
+    labs:[
+      {n:"TryHackMe (50+ rooms)", c:"$10/month"},
+      {n:"Hack The Box (VIP)", c:"$14/month"},
+      {n:"VirtualBox/VMware Lab Setup", c:"Free"},
+      {n:"VulnHub practice machines", c:"Free"},
+    ],
+    tools:["Nmap","Metasploit","Burp Suite","Wireshark","John the Ripper","Hydra","SQLmap"],
+    cost:"₹50,000 – ₹2,00,000 ($600 – $2,500)",
+    time:"6–12 months",
+    career:"Penetration Tester → Senior Pentester → Security Consultant → Red Team Lead",
+    companies:"Banks, Government Agencies, IT Firms, Defense, Security Consulting",
+    skills:["Networking","Linux","Scripting","Problem Solving","Attention to Detail"],
+  },
+  {
+    name:"Penetration Testing",
+    desc:"Simulate real-world cyberattacks to identify and exploit vulnerabilities in networks, applications, and systems, providing actionable remediation.",
+    certs:[
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"GPEN (GIAC Penetration Tester)", c:"$8,000+", t:"6 months"},
+      {n:"eCPPT (eLearnSecurity Certified Professional Penetration Tester)", c:"$1,000+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"Hack The Box (Pro Labs)", c:"$30/month"},
+      {n:"TryHackMe (Premium)", c:"$10/month"},
+      {n:"Offensive Security Labs", c:"$1,749 (incl. lab access)"},
+    ],
+    tools:["Metasploit","Burp Suite","Nmap","Wireshark","Nessus","OpenVAS","Gobuster","ffuf"],
+    cost:"₹80,000 – ₹3,00,000 ($1,000 – $3,500)",
+    time:"3–6 months",
+    career:"Junior Pentester → Pentester → Senior Pentester → Lead Pentester → Principal Consultant",
+    companies:"Security Consulting Firms, Boutique Pentest Firms, Banks, IT Services",
+    skills:["Network Security","Web Application Security","Scripting","Report Writing","Communication"],
+  },
+  {
+    name:"SOC Analyst",
+    desc:"Monitor, detect, analyze, and respond to security incidents in real-time using SIEM tools and threat intelligence.",
+    certs:[
+      {n:"Security+ (CompTIA)", c:"$392", t:"2–3 months"},
+      {n:"CySA+ (CompTIA)", c:"$392", t:"3–4 months"},
+      {n:"CEH (Certified Ethical Hacker)", c:"$950 – $1,199", t:"4–6 months"},
+      {n:"GCIA (GIAC Certified Intrusion Analyst)", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"TryHackMe (SOC Level 1)", c:"$10/month"},
+      {n:"LetsDefend (SOC Simulator)", c:"$10 – $30/month"},
+      {n:"Blue Team Labs Online", c:"Free/Paid"},
+    ],
+    tools:["Splunk","ELK Stack","Wireshark","Snort","Zeek","TheHive","MISP","VirusTotal"],
+    cost:"₹30,000 – ₹1,50,000 ($400 – $1,800)",
+    time:"3–6 months",
+    career:"SOC Analyst L1 → L2 → L3 → SOC Lead → Security Manager",
+    companies:"MNCs, Banks, Service Providers, Government, MSSPs",
+    skills:["Log Analysis","Incident Response","Threat Intelligence","Communication","Teamwork"],
+  },
+  {
+    name:"Digital Forensics",
+    desc:"Investigate cybercrimes by recovering, analyzing, and preserving digital evidence from computers, mobile devices, and networks for legal proceedings.",
+    certs:[
+      {n:"CCFP (Certified Cyber Forensics Professional)", c:"$1,200+", t:"6–12 months"},
+      {n:"CFCE (Certified Forensic Computer Examiner)", c:"$2,000+", t:"6 months"},
+      {n:"EnCE (EnCase Certified Examiner)", c:"$3,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"FTK Imager & EnCase practice", c:"Free/Paid"},
+      {n:"Forensic Analysis Labs", c:"Paid"},
+      {n:"Cyber Forensics CTF Challenges", c:"Free"},
+    ],
+    tools:["FTK","EnCase","Autopsy","Wireshark","X-Ways","Volatility","dd","Guymager"],
+    cost:"₹60,000 – ₹2,50,000 ($700 – $3,000)",
+    time:"6–12 months",
+    career:"Junior Forensics Analyst → Forensics Investigator → Senior Forensics Consultant → Law Enforcement Specialist",
+    companies:"Law Enforcement, Consulting Firms, Defense, Banks, Legal Firms",
+    skills:["Attention to Detail","Analytical Thinking","Chain of Custody","Report Writing","Legal Knowledge"],
+  },
+  {
+    name:"OSINT Intelligence",
+    desc:"Gather, analyze, and interpret publicly available information to generate actionable intelligence for cybersecurity, investigations, and corporate security.",
+    certs:[
+      {n:"OSINT-201 (Open Source Intelligence)", c:"$500+", t:"3–6 months"},
+      {n:"OCLS (OSINT Certified Lead Specialist)", c:"$1,000+", t:"4–6 months"},
+      {n:"C|OSINT (Certified OSINT)", c:"$800+", t:"3–6 months"},
+    ],
+    labs:[
+      {n:"OSINT Framework practice", c:"Free"},
+      {n:"Geoint tool practice", c:"Free"},
+      {n:"OSINT CTF Challenges", c:"Free"},
+    ],
+    tools:["Sherlock","theHarvester","PhoneInfoga","SpiderFoot","Maltego","Recon-ng","Google Dorks","Shodan","Censys"],
+    cost:"₹40,000 – ₹1,80,000 ($500 – $2,200)",
+    time:"3–9 months",
+    career:"OSINT Analyst → Intelligence Analyst → Senior OSINT Lead → Intelligence Manager → OSINT Consultant",
+    companies:"Government, Defense, Corporate Intelligence, Media, Law Enforcement",
+    skills:["Analytical Thinking","OSINT Tools","Social Media Intelligence","Report Writing","Discretion"],
+  },
+  {
+    name:"Cloud Security",
+    desc:"Secure cloud infrastructures by implementing security controls, identity management, encryption, and monitoring for AWS, Azure, and GCP environments.",
+    certs:[
+      {n:"CCSK (Certificate of Cloud Security Knowledge)", c:"$395", t:"2–3 months"},
+      {n:"CCSP (Certified Cloud Security Professional)", c:"$599", t:"4–6 months"},
+      {n:"AWS Certified Security – Specialty", c:"$300", t:"3–4 months"},
+      {n:"Azure Security Engineer Associate", c:"$165", t:"3–4 months"},
+    ],
+    labs:[
+      {n:"AWS Free Tier Labs", c:"Free (limited)"},
+      {n:"Azure Free Account Labs", c:"Free (limited)"},
+      {n:"Cloud Security CTF Challenges", c:"Free/Paid"},
+    ],
+    tools:["AWS Security Hub","Azure Security Center","CloudTrail","CloudFormation","Prisma Cloud","Wiz","Orca Security"],
+    cost:"₹70,000 – ₹3,50,000 ($900 – $4,200)",
+    time:"6–12 months",
+    career:"Cloud Security Analyst → Cloud Security Engineer → Cloud Security Architect → Cloud Security Lead",
+    companies:"Cloud Providers, Tech Giants, Banks, Startups, Consulting Firms",
+    skills:["AWS/Azure/GCP","Networking","Linux","Scripting","Identity Management"],
+  },
+  {
+    name:"IoT Security",
+    desc:"Protect Internet of Things devices and networks by identifying vulnerabilities in embedded systems, communication protocols, and device firmware.",
+    certs:[
+      {n:"CISSP-ISSAP (Information Systems Security Architecture Professional)", c:"$1,200+", t:"6–12 months"},
+      {n:"GIAC GICSP (Global Industrial Cyber Security Professional)", c:"$8,000+", t:"6 months"},
+      {n:"IoT Security Certification (IEC 62443)", c:"$1,000+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"IoT Pentest Labs", c:"Paid"},
+      {n:"Embedded Security CTF Challenges", c:"Free/Paid"},
+      {n:"OpenWRT/DD-WRT practice", c:"Free"},
+    ],
+    tools:["Firmware Analysis Tools","JTAG/SWD Debuggers","Wireshark","Scapy","Burp Suite","IoT Inspector","Shodan"],
+    cost:"₹50,000 – ₹2,20,000 ($600 – $2,800)",
+    time:"6–12 months",
+    career:"IoT Security Analyst → IoT Security Engineer → IoT Security Architect → ICS/SCADA Specialist",
+    companies:"IoT Companies, Manufacturing, Healthcare, Automotive, Smart City Projects",
+    skills:["Embedded Systems","Wireless Protocols","Hardware Knowledge","Firmware Analysis","Reverse Engineering"],
+  },
+  {
+    name:"Red Teaming",
+    desc:"Simulate advanced, multi-layered cyberattacks to test an organization's detection and response capabilities using adversary tactics, techniques, and procedures.",
+    certs:[
+      {n:"OSCP (Offensive Security Certified Professional)", c:"$1,749", t:"6–12 months"},
+      {n:"OSCE (Offensive Security Certified Expert)", c:"$3,000+", t:"12–18 months"},
+      {n:"CREST Certified Red Team Professional", c:"$2,000+", t:"12 months"},
+      {n:"GPEN (GIAC Penetration Tester)", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"Hack The Box (Pro Labs)", c:"$30/month"},
+      {n:"Offensive Security Advanced Labs", c:"$3,000+ (incl. lab access)"},
+      {n:"Custom Red Team Lab Setup", c:"Free/Paid"},
+    ],
+    tools:["Cobalt Strike","Metasploit","Empire","BloodHound","Nmap","Burp Suite","Responder","Impacket"],
+    cost:"₹90,000 – ₹4,00,000 ($1,200 – $5,000)",
+    time:"12–18 months",
+    career:"Red Team Member → Red Team Lead → Red Team Manager → Principal Red Team Consultant",
+    companies:"Defense, Security Consulting, Banks, Government, Large Enterprises",
+    skills:["Advanced Exploitation","Evasion Techniques","Reporting","Communication","Problem Solving"],
+  },
+  {
+    name:"Threat Intelligence",
+    desc:"Analyze cyber threats, track adversary groups, and provide actionable intelligence to prevent attacks using frameworks like MITRE ATT&CK and STIX/TAXII.",
+    certs:[
+      {n:"CTIA (Certified Threat Intelligence Analyst)", c:"$800+", t:"4–6 months"},
+      {n:"GCTI (GIAC Cyber Threat Intelligence)", c:"$8,000+", t:"6 months"},
+      {n:"C|TIA (Certified Threat Intelligence Analyst)", c:"$900+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"Threat Intelligence Platforms (TIPs) practice", c:"Free/Paid"},
+      {n:"MITRE ATT&CK Framework practice", c:"Free"},
+      {n:"Cyber Threat Intelligence CTF Challenges", c:"Free"},
+    ],
+    tools:["MISP","TheHive","ThreatConnect","Recorded Future","VirusTotal","Shodan","Censys","Maltego"],
+    cost:"₹50,000 – ₹2,50,000 ($600 – $3,000)",
+    time:"6–12 months",
+    career:"Threat Intelligence Analyst → Senior TI Analyst → TI Lead → Director of Threat Intelligence",
+    companies:"Defense, Finance, Large Enterprises, Government, Security Firms",
+    skills:["Data Analysis","Report Writing","OSINT","Framework Knowledge","Communication"],
+  },
+  {
+    name:"Malware Analysis",
+    desc:"Reverse engineer and analyze malicious software to understand its behavior, capabilities, and origins, enabling effective detection and removal strategies.",
+    certs:[
+      {n:"GREM (GIAC Reverse Engineering Malware)", c:"$8,000+", t:"6–12 months"},
+      {n:"CMMC (Certified Malware Analysis Master)", c:"$1,500+", t:"6–12 months"},
+      {n:"SANS FOR610", c:"$8,000+", t:"6 months"},
+    ],
+    labs:[
+      {n:"REMnux environment", c:"Free"},
+      {n:"Malware Analysis Labs", c:"Free/Paid"},
+      {n:"CTF Malware Challenges", c:"Free"},
+    ],
+    tools:["IDA Pro","Ghidra","OllyDbg","x64dbg","Wireshark","Process Monitor","Regshot","API Monitor"],
+    cost:"₹70,000 – ₹3,00,000 ($900 – $3,500)",
+    time:"6–12 months",
+    career:"Malware Analyst → Senior Malware Analyst → Reverse Engineer → Lead Researcher",
+    companies:"Security Firms, Defense, Government, AV Companies, Consulting",
+    skills:["Assembly Language","Reverse Engineering","Debugging","Analytical Thinking","Report Writing"],
+  },
+  {
+    name:"Identity & Access Management (IAM)",
+    desc:"Secure identities and control access to resources using authentication, authorization, and identity lifecycle management across enterprise systems.",
+    certs:[
+      {n:"CIAM (Certified Identity and Access Manager)", c:"$1,000+", t:"4–6 months"},
+      {n:"CISSP-ISSAP", c:"$1,200+", t:"6–12 months"},
+      {n:"CISM (Certified Information Security Manager)", c:"$600+", t:"4–6 months"},
+    ],
+    labs:[
+      {n:"IAM platform practice (Okta, Azure AD)", c:"Free/Paid"},
+      {n:"Identity Management CTF Challenges", c:"Free"},
+    ],
+    tools:["Okta","Azure AD","SailPoint","CyberArk","BeyondTrust","Ping Identity","ForgeRock"],
+    cost:"₹40,000 – ₹2,00,000 ($500 – $2,500)",
+    time:"3–9 months",
+    career:"IAM Analyst → IAM Engineer → IAM Architect → IAM Lead → IAM Consultant",
+    companies:"Banks, IT Firms, Government, Healthcare, Large Enterprises",
+    skills:["Identity Management","Access Control","Authentication Protocols","Compliance","Communication"],
+  },
+  {
+    name:"Security Consulting",
+    desc:"Provide expert security advisory services, assess security posture, develop strategies, and guide organizations in implementing effective security programs.",
+    certs:[
+      {n:"CISSP (Certified Information Systems Security Professional)", c:"$750", t:"6–12 months"},
+      {n:"CISM (Certified Information Security Manager)", c:"$600", t:"4–6 months"},
+      {n:"CISA (Certified Information Systems Auditor)", c:"$575", t:"4–6 months"},
+      {n:"C|CISO (Certified Chief Information Security Officer)", c:"$2,000+", t:"12 months"},
+    ],
+    labs:[
+      {n:"Risk Management practice", c:"Free/Paid"},
+      {n:"Compliance Framework training (ISO 27001, NIST)", c:"Free/Paid"},
+      {n:"Enterprise Security Architecture Labs", c:"Paid"},
+    ],
+    tools:["GRC Platforms","Risk Assessment Tools","Security Frameworks","Compliance Tools"],
+    cost:"₹60,000 – ₹3,50,000 ($700 – $4,200)",
+    time:"6–18 months",
+    career:"Security Consultant → Senior Consultant → Principal Consultant → Director of Consulting → CISO",
+    companies:"Consulting Firms, Big 4, Boutique Firms, Banks, Enterprises",
+    skills:["Risk Management","Communication","Business Acumen","Compliance Knowledge","Leadership"],
+  },
+];
+
+const NETWORKING = [
+  {
+    name:"OSI Model — 7 Layers",
+    desc:"The OSI model breaks network communication into seven layers. Attackers and defenders both think in these layers — a firewall operates differently than a web app scanner because they sit at different layers.",
+    diagram:`<svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg">
+      <style>.lyr{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .num{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#00ff41;}</style>
+      ${[
+        ["7","Application","HTTP, DNS, FTP, SMTP"],
+        ["6","Presentation","Encryption, SSL/TLS, encoding"],
+        ["5","Session","Session setup, auth handshakes"],
+        ["4","Transport","TCP, UDP — ports, reliability"],
+        ["3","Network","IP, routing, ICMP"],
+        ["2","Data Link","MAC addresses, switches, ARP"],
+        ["1","Physical","Cables, radio, electrical signal"],
+      ].map((row,i)=>`
+        <rect class="lyr" x="20" y="${10+i*40}" width="580" height="34" rx="4"/>
+        <text class="num" x="34" y="${32+i*40}">L${row[0]}</text>
+        <text class="lbl" x="70" y="${32+i*40}" font-weight="700">${row[1]}</text>
+        <text class="lbl" x="260" y="${32+i*40}" fill="#8fa898" font-size="11">${row[2]}</text>
+      `).join('')}
+    </svg>`,
+    points:["Encapsulation adds a header per layer as data moves down the stack, and strips it on the way up.","Firewalls (L3/L4) filter by IP/port; WAFs and proxies (L7) inspect actual application content.","Most real attacks — phishing, SQLi, XSS — happen at L7, while sniffing and spoofing often target L2/L3."],
+  },
+  {
+    name:"TCP/IP Model — 4 Layers",
+    desc:"The OSI model is 7 layers for teaching; the TCP/IP model is the 4-layer model the internet actually runs on. Every protocol you'll ever touch — HTTP, TCP, IP, Ethernet — maps onto this simpler stack.",
+    diagram:`<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <style>.lyr{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .osi{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#8fa898;}</style>
+      ${[
+        ["Application","HTTP, DNS, FTP, SSH, SMTP","OSI L7 + L6 + L5"],
+        ["Transport","TCP (reliable) / UDP (fast, no guarantee)","OSI L4"],
+        ["Internet","IP addressing & routing, ICMP","OSI L3"],
+        ["Network Access","Ethernet, Wi-Fi, MAC addresses, switches","OSI L2 + L1"],
+      ].map((row,i)=>`
+        <rect class="lyr" x="20" y="${10+i*58}" width="580" height="48" rx="4"/>
+        <text class="lbl" x="34" y="${34+i*58}" font-weight="700">${row[0]}</text>
+        <text class="osi" x="34" y="${50+i*58}">${row[1]}</text>
+        <text class="osi" x="440" y="${34+i*58}" fill="#00ff41">${row[2]}</text>
+      `).join('')}
+    </svg>`,
+    points:["This is the model that actually shows up in real tools — Wireshark's protocol column, packet headers, and RFCs all speak TCP/IP layering, not the full 7-layer OSI breakdown.","'Network Access' collapses OSI's Physical + Data Link into one layer — this is why a switch (L2) and a NIC/cable (L1) are often discussed together.","Understanding this mapping matters because job interviews and certs (Security+, Network+) test both models, and expect you to translate between them."],
+  },
+  {
+    name:"TCP vs UDP",
+    desc:"TCP and UDP are the two transport-layer protocols almost everything rides on. One guarantees delivery; the other trades reliability for speed — and the choice has real security implications.",
+    diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:14px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <rect class="box" x="15" y="15" width="270" height="160" rx="6"/>
+      <text class="h" x="30" y="40">TCP</text>
+      <text class="t" x="30" y="65" fill="#8fa898" font-size="11">Connection-oriented</text>
+      <text class="t" x="30" y="85" fill="#8fa898" font-size="11">3-way handshake required</text>
+      <text class="t" x="30" y="105" fill="#8fa898" font-size="11">Guarantees delivery & order</text>
+      <text class="t" x="30" y="125" fill="#8fa898" font-size="11">Used by: HTTP(S), SSH, FTP, SMTP</text>
+      <text class="t" x="30" y="150" fill="#8fa898" font-size="11">Slower, more overhead</text>
+      <rect class="box" x="315" y="15" width="270" height="160" rx="6"/>
+      <text class="h" x="330" y="40">UDP</text>
+      <text class="t" x="330" y="65" fill="#8fa898" font-size="11">Connectionless</text>
+      <text class="t" x="330" y="85" fill="#8fa898" font-size="11">No handshake, just sends</text>
+      <text class="t" x="330" y="105" fill="#8fa898" font-size="11">No delivery guarantee</text>
+      <text class="t" x="330" y="125" fill="#8fa898" font-size="11">Used by: DNS, DHCP, VoIP, streaming, gaming</text>
+      <text class="t" x="330" y="150" fill="#8fa898" font-size="11">Faster, low overhead</text>
+    </svg>`,
+    points:["UDP's lack of a handshake is exactly what makes DNS amplification and NTP amplification DDoS attacks possible — an attacker spoofs the source IP and gets a much larger reply sent to the victim.","Nmap's UDP scan (-sU) is notoriously slower and less reliable than a TCP scan, because closed UDP ports often just stay silent instead of replying.","Knowing which protocol a service uses tells you what to expect in a packet capture — TCP shows a clear handshake/teardown; UDP just shows datagrams with no session state."],
+  },
+  {
+    name:"TCP Three-Way Handshake",
+    desc:"Every reliable TCP connection — the basis of HTTP, SSH, and most services — starts with this exchange. Understanding it is essential for reading packet captures and spotting scans.",
+    diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
+      <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
+      <text class="node" x="55" y="15">CLIENT</text>
+      <text class="node" x="435" y="15">SERVER</text>
+      <line class="ln" x1="90" y1="55" x2="470" y2="80" marker-end="url(#arrow)"/>
+      <text class="lbl2" x="230" y="50">1. SYN →</text>
+      <line class="ln" x1="470" y1="105" x2="90" y2="130" marker-end="url(#arrow)"/>
+      <text class="lbl2" x="210" y="100">2. ← SYN-ACK</text>
+      <line class="ln" x1="90" y1="155" x2="470" y2="180" marker-end="url(#arrow)"/>
+      <text class="lbl2" x="230" y="150">3. ACK →</text>
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["A half-open scan (SYN, no final ACK) is how tools like Nmap perform stealthy port scans.","A SYN flood — many SYNs, never completing the handshake — is a classic DoS technique.","Wireshark filters like tcp.flags.syn==1 && tcp.flags.ack==0 isolate handshake attempts in a capture."],
+  },
+  {
+    name:"DNS Resolution Flow",
+    desc:"DNS turns domain names into IP addresses. It's also a frequent attack surface — cache poisoning, tunneling, and typosquatting all abuse this flow.",
+    diagram:`<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+      <style>.box{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .a{stroke:#00ff41;stroke-width:1;fill:none;}</style>
+      ${[["Client",20],["Resolver",165],["Root",310],["TLD (.com)",440],["Authoritative NS",575]].map(b=>`
+        <rect class="box" x="${b[1]-55}" y="70" width="120" height="46" rx="6"/>
+        <text class="t" x="${b[1]-55+10}" y="98" font-size="11">${b[0]}</text>
+      `).join('')}
+      <path class="a" d="M85,93 H110" marker-end="url(#a2)"/>
+      <path class="a" d="M230,80 Q270,55 300,80" marker-end="url(#a2)"/>
+      <path class="a" d="M360,93 H385" marker-end="url(#a2)"/>
+      <path class="a" d="M490,93 H520" marker-end="url(#a2)"/>
+      <path class="a" d="M165,140 Q400,175 640,110" stroke-dasharray="3,4"/>
+      <text class="t" x="230" y="165" fill="#8fa898" font-size="10">resolved IP returned back to client</text>
+      <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["A recursive resolver walks Root → TLD → Authoritative on the client's behalf and caches the result.","DNS spoofing/cache poisoning injects a false record so victims resolve a malicious IP for a real domain name.","OSINT tools like theHarvester and dnsrecon use this same chain to enumerate subdomains and mail servers."],
+  },
+  {
+    name:"DHCP — The DORA Process",
+    desc:"DHCP automatically assigns IP addresses to devices joining a network. The four-step exchange is called DORA: Discover, Offer, Request, Acknowledge.",
+    diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
+      <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
+      <text class="node" x="45" y="15">DHCP CLIENT</text>
+      <text class="node" x="420" y="15">DHCP SERVER</text>
+      <line class="ln" x1="90" y1="48" x2="470" y2="65" marker-end="url(#a3)"/><text class="lbl2" x="200" y="45">1. DISCOVER →</text>
+      <line class="ln" x1="470" y1="85" x2="90" y2="102" marker-end="url(#a3)"/><text class="lbl2" x="200" y="82">2. ← OFFER</text>
+      <line class="ln" x1="90" y1="122" x2="470" y2="139" marker-end="url(#a3)"/><text class="lbl2" x="200" y="119">3. REQUEST →</text>
+      <line class="ln" x1="470" y1="159" x2="90" y2="176" marker-end="url(#a3)"/><text class="lbl2" x="200" y="156">4. ← ACK</text>
+      <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Rogue DHCP servers can hand out a malicious gateway/DNS, silently routing victims' traffic through an attacker (a classic MITM setup).","DHCP starvation attacks exhaust a server's IP pool by flooding it with fake DISCOVER requests.","Tools like Yersinia and dhcpstarv are used to test for these weaknesses in a lab."],
+  },
+  {
+    name:"Subnetting & CIDR",
+    desc:"Subnetting divides a network into smaller segments. CIDR notation (like /24) tells you how many addresses a network/host portion covers — essential for reading scan results and scoping a pentest.",
+    diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .t2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#8fa898;} .netbit{fill:rgba(0,255,65,0.22);stroke:#00ff41;} .hostbit{fill:rgba(255,255,255,0.03);stroke:#00ff41;}</style>
+      <text class="t" x="20" y="25">192.168.1.0 / 24</text>
+      ${Array.from({length:32}).map((_,i)=>`<rect class="${i<24?'netbit':'hostbit'}" x="${20+i*17.5}" y="45" width="15" height="26" stroke-width="0.6"/>`).join('')}
+      <text class="t2" x="20" y="92">← 24 network bits (192.168.1.x fixed)</text>
+      <text class="t2" x="440" y="92">8 host bits →</text>
+      <text class="t2" x="20" y="120">Usable hosts on a /24 = 2^8 − 2 = 254 addresses</text>
+      <text class="t2" x="20" y="140">Smaller CIDR number = larger network. /16 ≫ /24 ≫ /30</text>
+    </svg>`,
+    points:["Scoping a pentest often means being handed a CIDR range (e.g. 10.0.5.0/23) — knowing the math tells you exactly how many hosts are in scope.","Nmap accepts CIDR directly: nmap 192.168.1.0/24 scans the whole subnet in one command.","VLSM (variable-length subnet masking) is the practical extension of this — different segments of a network can use different CIDR sizes."],
+  },
+  {
+    name:"Common Ports & Protocols",
+    desc:"Port numbers are the first thing any recon or scan reveals about a target. Knowing the common ones by memory speeds up every OSINT and pentest workflow.",
+    diagram:`<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;}</style>
+      ${[
+        ["21","FTP","File transfer — often plaintext creds"],
+        ["22","SSH","Encrypted remote shell access"],
+        ["23","Telnet","Unencrypted remote shell — legacy risk"],
+        ["25","SMTP","Outbound mail — spoofing target"],
+        ["53","DNS","Name resolution"],
+        ["80","HTTP","Unencrypted web traffic"],
+        ["443","HTTPS","Encrypted web traffic (TLS)"],
+        ["3389","RDP","Windows remote desktop — common ransomware entry"],
+      ].map((r,i)=>`
+        <rect class="row" x="10" y="${10+i*30}" width="580" height="26" rx="3"/>
+        <text class="p" x="20" y="${28+i*30}">${r[0]}</text>
+        <text class="t" x="70" y="${28+i*30}" font-weight="700">${r[1]}</text>
+        <text class="t" x="150" y="${28+i*30}" fill="#8fa898" font-size="11">${r[2]}</text>
+      `).join('')}
+    </svg>`,
+    points:["An open, unexpected port (e.g. 3389 exposed to the internet) is one of the first red flags in any external assessment.","Service banners on these ports (grabbed via Nmap -sV) often reveal software versions — a direct lead to known CVEs.","Blocking or restricting legacy ports like 23 (Telnet) and 21 (FTP) is a standard hardening step in any network defense checklist."],
+  },
+  {
+    name:"IP Addressing — IPv4 vs IPv6",
+    desc:"Every device on a network needs an address. IPv4 is still dominant but exhausted in raw address space; IPv6 is the long-term replacement — both show up constantly in logs, scopes, and attack traffic.",
+    diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <rect class="box" x="15" y="15" width="270" height="120" rx="6"/>
+      <text class="h" x="30" y="38">IPv4</text>
+      <text class="t" x="30" y="62">192.168.1.10</text>
+      <text class="t" x="30" y="82" fill="#8fa898" font-size="11">32-bit · 4 octets · ~4.3B addresses</text>
+      <text class="t" x="30" y="102" fill="#8fa898" font-size="11">Needs NAT to cope with exhaustion</text>
+      <rect class="box" x="315" y="15" width="270" height="120" rx="6"/>
+      <text class="h" x="330" y="38">IPv6</text>
+      <text class="t" x="330" y="62" font-size="11">2001:0db8:85a3::8a2e:370:7334</text>
+      <text class="t" x="330" y="82" fill="#8fa898" font-size="11">128-bit · 8 groups · effectively unlimited</text>
+      <text class="t" x="330" y="102" fill="#8fa898" font-size="11">Built-in IPsec support, no NAT needed</text>
+    </svg>`,
+    points:["Private IPv4 ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) never route on the public internet — seeing one externally usually signals misconfiguration.","IPv6 is often overlooked by security tooling; attackers sometimes tunnel traffic over IPv6 specifically because older monitoring only watches IPv4.","Scanning tools need explicit IPv6 support (e.g. nmap -6) — a network can look fully patched on IPv4 and still be wide open on IPv6."],
+  },
+  {
+    name:"ARP & MAC Resolution",
+    desc:"ARP maps an IP address to a physical MAC address on the local network segment. It's simple, trusted by default, and one of the most commonly abused protocols in local attacks.",
+    diagram:`<svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg">
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <line class="ln" x1="90" y1="20" x2="90" y2="160" stroke-dasharray="3,4"/>
+      <line class="ln" x1="470" y1="20" x2="470" y2="160" stroke-dasharray="3,4"/>
+      <text class="node" x="40" y="15">HOST A</text>
+      <text class="node" x="415" y="15">HOST B (192.168.1.5)</text>
+      <line class="ln" x1="90" y1="60" x2="470" y2="80" marker-end="url(#a4)"/>
+      <text class="lbl2" x="130" y="55">1. Broadcast: Who has 192.168.1.5? →</text>
+      <line class="ln" x1="470" y1="105" x2="90" y2="130" marker-end="url(#a4)"/>
+      <text class="lbl2" x="150" y="100">2. ← Reply: I am, my MAC is AA:BB:CC...</text>
+      <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["ARP spoofing sends forged replies claiming an attacker's MAC owns the gateway's IP — the core technique behind local man-in-the-middle attacks.","Tools like arpspoof, Ettercap, and Bettercap automate this on a LAN; tools like arpwatch or arp -a monitoring help detect it.","Because ARP has no authentication built in, static ARP entries or dynamic ARP inspection (on managed switches) are the standard defenses."],
+  },
+  {
+    name:"Routing & Switching",
+    desc:"Switches move traffic within a local network using MAC addresses (Layer 2); routers move traffic between networks using IP addresses (Layer 3). Knowing which device handles what narrows down where an attack or misconfiguration lives.",
+    diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <rect class="box" x="10" y="55" width="90" height="50" rx="5"/><text class="t" x="25" y="85">PC / Host</text>
+      <line class="ln" x1="100" y1="80" x2="170" y2="80" marker-end="url(#a5)"/>
+      <rect class="box" x="170" y="55" width="90" height="50" rx="5"/><text class="t" x="180" y="78">Switch</text><text class="t" x="180" y="94" fill="#8fa898" font-size="10">Layer 2 · MAC</text>
+      <line class="ln" x1="260" y1="80" x2="330" y2="80" marker-end="url(#a5)"/>
+      <rect class="box" x="330" y="55" width="90" height="50" rx="5"/><text class="t" x="340" y="78">Router</text><text class="t" x="340" y="94" fill="#8fa898" font-size="10">Layer 3 · IP</text>
+      <line class="ln" x1="420" y1="80" x2="490" y2="80" marker-end="url(#a5)"/>
+      <rect class="box" x="490" y="55" width="100" height="50" rx="5"/><text class="t" x="505" y="85">Internet</text>
+      <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Switches build a MAC address table by watching traffic; flooding that table (MAC flooding) can force a switch to broadcast everything, letting an attacker sniff traffic meant for others.","Routing tables and default gateways are prime targets — poisoning them (or a rogue DHCP handing out a fake gateway) enables large-scale interception.","Understanding this split is why network diagrams during a pentest or incident matter: it tells you where to place a tap or where a compromise can actually spread."],
+  },
+  {
+    name:"NAT — Network Address Translation",
+    desc:"NAT lets many internal private IPs share one public IP address. It's not a security feature by design, but it does obscure internal addressing from the outside.",
+    diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <rect class="box" x="10" y="45" width="160" height="55" rx="5"/>
+      <text class="t" x="22" y="68">192.168.1.10:5000</text><text class="t" x="22" y="86" fill="#8fa898" font-size="10">Internal / Private</text>
+      <line class="ln" x1="170" y1="72" x2="250" y2="72" marker-end="url(#a6)"/>
+      <rect class="box" x="250" y="35" width="120" height="75" rx="5"/>
+      <text class="t" x="262" y="60" fill="#00ff41" font-weight="700">NAT Gateway</text><text class="t" x="262" y="80" fill="#8fa898" font-size="10">translates the</text><text class="t" x="262" y="94" fill="#8fa898" font-size="10">address + port</text>
+      <line class="ln" x1="370" y1="72" x2="440" y2="72" marker-end="url(#a6)"/>
+      <rect class="box" x="440" y="45" width="150" height="55" rx="5"/>
+      <text class="t" x="452" y="68">203.0.113.5:40001</text><text class="t" x="452" y="86" fill="#8fa898" font-size="10">Public / Internet-facing</text>
+      <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["NAT is often mistaken for a firewall — it hides internal IPs but doesn't inspect or block traffic on its own.","Port forwarding (a common NAT config) intentionally punches a hole through to an internal host — a frequent source of accidental exposure on home and small-business networks.","During recon, seeing one public IP serve many services can hint at NAT with several internal hosts behind it."],
+  },
+  {
+    name:"VLANs & Network Segmentation",
+    desc:"VLANs split one physical switch into multiple isolated logical networks. Segmentation is one of the most effective, boring, and underused defenses against lateral movement.",
+    diagram:`<svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .cross{stroke:#ff3b3b;stroke-width:2;}</style>
+      <rect class="box" x="200" y="10" width="160" height="40" rx="5"/><text class="t" x="230" y="35">Switch (trunk)</text>
+      <rect class="box" x="20" y="90" width="200" height="60" rx="5"/><text class="t" x="35" y="115" fill="#00ff41" font-weight="700">VLAN 10 — Finance</text><text class="t" x="35" y="135" fill="#8fa898" font-size="10">Isolated broadcast domain</text>
+      <rect class="box" x="340" y="90" width="200" height="60" rx="5"/><text class="t" x="355" y="115" fill="#00ff41" font-weight="700">VLAN 20 — Guest Wi-Fi</text><text class="t" x="355" y="135" fill="#8fa898" font-size="10">No visibility into VLAN 10</text>
+      <line x1="120" y1="90" x2="120" y2="50" stroke="#00ff41"/>
+      <line x1="440" y1="90" x2="440" y2="50" stroke="#00ff41"/>
+      <line class="cross" x1="230" y1="120" x2="330" y2="120"/>
+      <line class="cross" x1="330" y1="105" x2="230" y2="135"/>
+      <text class="t" x="235" y="160" fill="#ff3b3b" font-size="10">blocked by default without routing</text>
+    </svg>`,
+    points:["A guest Wi-Fi VLAN separate from internal servers means a compromised guest device can't directly reach sensitive systems.","Ransomware and worms rely on flat networks to spread — proper segmentation is one of the single biggest blockers to lateral movement.","VLAN hopping attacks (double tagging, trunk port abuse) exist specifically to defeat this isolation, which is why trunk ports need careful configuration."],
+  },
+  {
+    name:"Firewalls & ACLs",
+    desc:"Firewalls enforce which traffic is allowed to cross a boundary. Access Control Lists (ACLs) are the rule sets — usually evaluated top-down — that define exactly what's permitted or denied.",
+    diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .mono{font-family:'JetBrains Mono',monospace;font-size:11px;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <text class="t" x="15" y="20" fill="#8fa898">Untrusted Zone</text>
+      <rect class="box" x="15" y="35" width="90" height="40" rx="4"/><text class="t" x="30" y="60">Internet</text>
+      <rect class="box" x="230" y="20" width="150" height="130" rx="6"/>
+      <text class="t" x="245" y="42" fill="#00ff41" font-weight="700">FIREWALL / ACL</text>
+      <text class="mono" x="245" y="65" fill="#e6f5e9">allow tcp 443 →</text>
+      <text class="mono" x="245" y="82" fill="#e6f5e9">allow tcp 22 (admin)</text>
+      <text class="mono" x="245" y="99" fill="#ff3b3b">deny tcp 3389</text>
+      <text class="mono" x="245" y="116" fill="#ff3b3b">deny all (implicit)</text>
+      <text class="t" x="500" y="20" fill="#8fa898">Trusted Zone</text>
+      <rect class="box" x="495" y="35" width="90" height="40" rx="4"/><text class="t" x="505" y="60">Internal LAN</text>
+      <line x1="105" y1="55" x2="230" y2="85" stroke="#00ff41"/>
+      <line x1="380" y1="85" x2="495" y2="55" stroke="#00ff41"/>
+    </svg>`,
+    points:["ACLs are read top to bottom — the first matching rule wins, so rule order is as important as the rules themselves.","Almost every ACL ends with an implicit deny-all — anything not explicitly allowed gets blocked by default (this is the whole point of least privilege).","Firewall misconfiguration (an overly broad allow rule, a forgotten temporary rule) is one of the most common findings in real security assessments."],
+  },
+  {
+    name:"VPN & Tunneling",
+    desc:"A VPN wraps traffic in an encrypted tunnel between two points, making it unreadable and often unroutable to anything sitting in between — used both to protect legitimate traffic and, less legitimately, to hide malicious traffic.",
+    diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .tunnel{fill:rgba(0,255,65,0.04);stroke:#00ff41;stroke-dasharray:4,3;}</style>
+      <rect class="box" x="15" y="50" width="110" height="50" rx="5"/><text class="t" x="30" y="80">Client</text>
+      <rect class="tunnel" x="150" y="35" width="300" height="80" rx="40"/>
+      <text class="t" x="200" y="80" fill="#00ff41" font-weight="700">Encrypted Tunnel</text>
+      <text class="t" x="200" y="100" fill="#8fa898" font-size="10">(over the public internet)</text>
+      <rect class="box" x="475" y="50" width="110" height="50" rx="5"/><text class="t" x="485" y="72">VPN</text><text class="t" x="485" y="88" fill="#8fa898" font-size="10">Gateway</text>
+    </svg>`,
+    points:["IPsec and SSL/TLS-based VPNs (like OpenVPN, WireGuard) differ in how they establish and encrypt the tunnel, but the goal is the same: confidentiality and integrity in transit.","From a defensive view, VPN gateways are high-value targets — a single compromised VPN credential often grants deep internal network access.","From an offensive/OSINT view, VPN exit nodes and Tor are common ways both attackers and researchers mask their true origin IP."],
+  },
+  {
+    name:"Wireless Security — WEP to WPA3",
+    desc:"Wi-Fi security has evolved through several protocols, each fixing weaknesses in the last. Knowing which one a network runs tells you almost instantly how vulnerable it is.",
+    diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;}</style>
+      ${[
+        ["WEP","Broken — crackable in minutes","#ff3b3b"],
+        ["WPA","Legacy — TKIP, still weak","#ffbd2e"],
+        ["WPA2","Standard for years — AES/CCMP, vulnerable to KRACK","#8fa898"],
+        ["WPA3","Current — SAE handshake, resists offline cracking","#00ff41"],
+      ].map((r,i)=>`
+        <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
+        <text class="p" x="24" y="${33+i*42}" fill="${r[2]}">${r[0]}</text>
+        <text class="t" x="120" y="${33+i*42}" fill="#8fa898" font-size="11">${r[1]}</text>
+      `).join('')}
+    </svg>`,
+    points:["Tools like Aircrack-ng capture a WPA/WPA2 handshake, then attempt offline dictionary or brute-force cracking against it.","Evil twin attacks clone a legitimate access point's SSID to trick devices into connecting to an attacker-controlled network instead.","WPA3's SAE handshake specifically defeats the offline handshake-capture-and-crack approach that made WPA2 practically attackable."],
+  },
+  {
+    name:"Proxies & Load Balancers",
+    desc:"A proxy sits between a client and the destination, forwarding requests on its behalf. A load balancer distributes incoming traffic across multiple backend servers — both change what a scan or a packet capture actually shows you.",
+    diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <rect class="box" x="15" y="65" width="90" height="45" rx="5"/><text class="t" x="30" y="92">Client</text>
+      <line class="ln" x1="105" y1="87" x2="180" y2="87" marker-end="url(#a7)"/>
+      <rect class="box" x="180" y="60" width="130" height="55" rx="5"/><text class="t" x="195" y="82" font-weight="700" fill="#00ff41">Load Balancer</text><text class="t" x="195" y="100" fill="#8fa898" font-size="10">distributes requests</text>
+      <line class="ln" x1="310" y1="75" x2="400" y2="30" marker-end="url(#a7)"/>
+      <line class="ln" x1="310" y1="87" x2="400" y2="87" marker-end="url(#a7)"/>
+      <line class="ln" x1="310" y1="100" x2="400" y2="145" marker-end="url(#a7)"/>
+      <rect class="box" x="400" y="10" width="120" height="35" rx="4"/><text class="t" x="415" y="32" font-size="11">Server 1</text>
+      <rect class="box" x="400" y="70" width="120" height="35" rx="4"/><text class="t" x="415" y="92" font-size="11">Server 2</text>
+      <rect class="box" x="400" y="128" width="120" height="35" rx="4"/><text class="t" x="415" y="150" font-size="11">Server 3</text>
+      <defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Scanning a load-balanced service can hit different backend servers on different requests — inconsistent results during a pentest often mean a load balancer is in play, not a flaky target.","Reverse proxies (like Nginx, Cloudflare) frequently sit in front of the real origin server, meaning the IP an attacker sees first isn't the actual host — a common OSINT trap when 'finding the real IP' behind a CDN.","Misconfigured proxies (open proxies, SSRF-vulnerable proxy endpoints) are their own class of finding in web app assessments."],
+  },
+  {
+    name:"IDS / IPS — Detection vs Prevention",
+    desc:"An Intrusion Detection System watches traffic and alerts on suspicious patterns. An Intrusion Prevention System sits inline and can actively block that traffic in real time.",
+    diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <text class="t" x="15" y="20" fill="#8fa898">IDS — passive, out-of-band</text>
+      <line class="ln" x1="15" y1="55" x2="300" y2="55" marker-end="url(#a8)"/>
+      <rect class="box" x="120" y="65" width="80" height="35" rx="4"/><text class="t" x="132" y="87" font-size="10">IDS (tap)</text>
+      <line class="ln" x1="160" y1="65" x2="160" y2="55" stroke-dasharray="2,3"/>
+      <text class="t" x="230" y="50" fill="#8fa898" font-size="10">traffic flows on unaffected</text>
+
+      <text class="t" x="15" y="130" fill="#8fa898">IPS — inline, can block</text>
+      <line class="ln" x1="15" y1="160" x2="120" y2="160" marker-end="url(#a8)"/>
+      <rect class="box" x="120" y="142" width="90" height="36" rx="4"/><text class="t" x="132" y="164" font-size="10" fill="#00ff41">IPS (inline)</text>
+      <line class="ln" x1="210" y1="160" x2="320" y2="160" marker-end="url(#a8)"/>
+      <text class="t" x="330" y="150" fill="#8fa898" font-size="10">passes if clean,</text>
+      <text class="t" x="330" y="164" fill="#ff3b3b" font-size="10">drops if malicious</text>
+      <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Signature-based detection catches known attack patterns fast but misses novel ones; anomaly-based detection catches the unknown but generates more false positives.","Tools like Snort and Suricata can run in either IDS (alert-only) or IPS (inline-blocking) mode depending on deployment.","A SOC analyst's daily work often centers on triaging IDS/IPS alerts — separating real incidents from the constant background noise of false positives."],
+  },
+  {
+    name:"SSL/TLS Handshake",
+    desc:"TLS is what turns HTTP into HTTPS — encrypting traffic between client and server. The handshake negotiates encryption before a single byte of real data is sent.",
+    diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
+      <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
+      <text class="node" x="55" y="15">CLIENT</text>
+      <text class="node" x="435" y="15">SERVER</text>
+      <line class="ln" x1="90" y1="45" x2="470" y2="65" marker-end="url(#a9)"/><text class="lbl2" x="150" y="42">1. Client Hello (supported ciphers) →</text>
+      <line class="ln" x1="470" y1="85" x2="90" y2="105" marker-end="url(#a9)"/><text class="lbl2" x="130" y="82">2. ← Server Hello + Certificate</text>
+      <line class="ln" x1="90" y1="125" x2="470" y2="145" marker-end="url(#a9)"/><text class="lbl2" x="140" y="122">3. Key exchange, session key derived →</text>
+      <line class="ln" x1="470" y1="165" x2="90" y2="185" marker-end="url(#a9)"/><text class="lbl2" x="150" y="162">4. ← Finished — encrypted channel live</text>
+      <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["The certificate exchanged in step 2 is what browsers validate against a trusted Certificate Authority — a self-signed or expired cert is a common finding and a real attack vector.","SSL stripping downgrades a victim from HTTPS to HTTP mid-handshake, which is why HSTS (HTTP Strict Transport Security) exists as a defense.","Tools like sslyze and testssl.sh audit which weak ciphers or outdated TLS versions (like TLS 1.0) a server still accepts."],
+  },
+  {
+    name:"MITM Attacks — ARP & DNS Spoofing",
+    desc:"Man-in-the-middle attacks insert the attacker between two communicating parties, letting them read or alter traffic neither side realizes is being intercepted.",
+    diagram:`<svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .abox{fill:rgba(255,59,59,0.08);stroke:#ff3b3b;} .ln{stroke:#00ff41;stroke-width:1;} .lnbad{stroke:#ff3b3b;stroke-width:1;stroke-dasharray:4,3;}</style>
+      <rect class="box" x="15" y="70" width="110" height="45" rx="5"/><text class="t" x="30" y="97">Client</text>
+      <rect class="abox" x="215" y="10" width="130" height="45" rx="5"/><text class="t" x="230" y="37" fill="#ff3b3b" font-weight="700">Attacker</text>
+      <rect class="box" x="435" y="70" width="110" height="45" rx="5"/><text class="t" x="445" y="97" font-size="11">Gateway / Server</text>
+      <line class="lnbad" x1="125" y1="90" x2="215" y2="45"/>
+      <line class="lnbad" x1="345" y1="45" x2="435" y2="90"/>
+      <text class="t" x="150" y="140" fill="#8fa898" font-size="10">Real traffic re-routed through the attacker,</text>
+      <text class="t" x="150" y="156" fill="#8fa898" font-size="10">who can read, log, or modify it silently</text>
+    </svg>`,
+    points:["ARP spoofing (local network) and DNS spoofing (name resolution) are the two most common ways to establish this position without physical network access.","Detection relies on things like unexpected ARP table changes, certificate warnings (if traffic is HTTPS), or unusual latency — most victims never notice.","End-to-end encryption (proper TLS, certificate pinning) is the main defense — it doesn't stop the interception but makes the intercepted traffic unreadable."],
+  },
+  {
+    name:"Network Devices — Hub, Switch, Router, AP",
+    desc:"The physical building blocks of any network. Knowing what each device actually does — and doesn't do — tells you where security controls belong.",
+    diagram:`<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      ${[["Hub","Repeats to all ports — no intelligence, easy to sniff",0],["Switch","Forwards by MAC table — Layer 2 aware",150],["Router","Forwards by IP — connects separate networks",300],["Access Point","Bridges wired LAN to Wi-Fi clients",450]].map(d=>`
+        <rect class="box" x="${d[2]+10}" y="15" width="130" height="70" rx="6"/>
+        <text class="h" x="${d[2]+20}" y="42">${d[0]}</text>
+        <text class="t" x="${d[2]+20}" y="62" font-size="10" fill="#8fa898">${d[1].slice(0,26)}</text>
+        <text class="t" x="${d[2]+20}" y="76" font-size="10" fill="#8fa898">${d[1].slice(26)}</text>
+      `).join('')}
+    </svg>`,
+    points:["Hubs are effectively obsolete but understanding them explains *why* switched networks are much harder to passively sniff than old shared-media ones.","A compromised switch or AP is a high-value target — controlling it means controlling what every connected device sees.","Rogue access points (unauthorized Wi-Fi hardware plugged into a network) are a classic physical-access attack vector covered in wireless security audits."],
+  },
+  {
+    name:"Network Topologies",
+    desc:"Topology describes how devices are physically or logically connected. It affects performance, single points of failure, and how far a compromise can spread.",
+    diagram:`<svg viewBox="0 0 620 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .n{fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <text class="t" x="30" y="15" fill="#00ff41" font-weight="700">Star</text>
+      <circle class="n" cx="80" cy="70" r="5"/>
+      ${[[40,40],[120,40],[40,100],[120,100]].map(p=>`<line class="ln" x1="80" y1="70" x2="${p[0]}" y2="${p[1]}"/><circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`).join('')}
+
+      <text class="t" x="200" y="15" fill="#00ff41" font-weight="700">Bus</text>
+      <line class="ln" x1="190" y1="70" x2="330" y2="70"/>
+      ${[190,230,270,310].map(x=>`<circle class="n" cx="${x}" cy="70" r="4"/>`).join('')}
+
+      <text class="t" x="380" y="15" fill="#00ff41" font-weight="700">Ring</text>
+      ${[[420,45],[460,45],[480,80],[460,115],[420,115],[400,80]].map((p,i,arr)=>{
+        const next = arr[(i+1)%arr.length];
+        return `<line class="ln" x1="${p[0]}" y1="${p[1]}" x2="${next[0]}" y2="${next[1]}"/><circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`;
+      }).join('')}
+
+      <text class="t" x="510" y="15" fill="#00ff41" font-weight="700">Mesh</text>
+      ${[[540,45],[590,45],[540,100],[590,100]].map((p,i,arr)=>arr.map(q=>p!==q?`<line class="ln" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke-opacity="0.5"/>`:'').join('')).join('')}
+      ${[[540,45],[590,45],[540,100],[590,100]].map(p=>`<circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`).join('')}
+    </svg>`,
+    points:["Star topology (what most offices actually use, centered on a switch) means the switch is a single point of failure — and a single point of control for monitoring.","Mesh topology has no single point of failure but is far harder to fully monitor — every link is a potential blind spot.","Understanding topology matters when planning where to place sensors, taps, or IDS devices to actually see all relevant traffic."],
+  },
+  {
+    name:"ICMP, Ping & Traceroute",
+    desc:"ICMP is used for diagnostics and error reporting rather than carrying application data — ping and traceroute are built on it, and so are several classic attacks.",
+    diagram:`<svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <rect class="box" x="15" y="50" width="100" height="45" rx="5"/><text class="t" x="30" y="77">You</text>
+      <line class="ln" x1="115" y1="65" x2="440" y2="65" marker-end="url(#a10)"/><text class="t" x="180" y="58" fill="#00ff41" font-size="11">Echo Request (ping) →</text>
+      <line class="ln" x1="440" y1="90" x2="115" y2="90" marker-end="url(#a10)"/><text class="t" x="180" y="110" fill="#00ff41" font-size="11">← Echo Reply</text>
+      <rect class="box" x="440" y="50" width="100" height="45" rx="5"/><text class="t" x="450" y="77" font-size="11">Target</text>
+      <defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Traceroute works by sending packets with increasing TTL values and recording which router sends back a 'TTL exceeded' — mapping the path hop by hop.","ICMP flood (ping flood) and the Smurf attack (spoofed broadcast pings) are classic ICMP-based denial-of-service techniques.","Many networks rate-limit or block ICMP at the perimeter specifically because it's such a common recon and DoS tool — but this also breaks legitimate diagnostics, a real trade-off admins have to weigh."],
+  },
+  {
+    name:"IP Address Types",
+    desc:"Not all traffic goes to just one destination. Knowing the difference between these delivery types matters for both network design and spotting abnormal traffic.",
+    diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;}</style>
+      ${[
+        ["Unicast","One sender → one specific receiver","Normal web browsing, SSH"],
+        ["Broadcast","One sender → every host on the segment","DHCP Discover, ARP requests"],
+        ["Multicast","One sender → a subscribed group","Streaming, routing protocol updates"],
+        ["Anycast","One address → nearest of several servers","Public DNS (like 1.1.1.1), CDNs"],
+      ].map((r,i)=>`
+        <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
+        <text class="p" x="24" y="${33+i*42}">${r[0]}</text>
+        <text class="t" x="150" y="${33+i*42}" fill="#e6f5e9" font-size="11">${r[1]}</text>
+        <text class="t" x="400" y="${33+i*42}" fill="#8fa898" font-size="10">${r[2]}</text>
+      `).join('')}
+    </svg>`,
+    points:["Broadcast traffic is limited to a single subnet/broadcast domain — this is one practical reason VLANs and subnetting reduce noise and attack surface.","A flood of unexpected broadcast traffic is a classic symptom of a misconfigured device, a loop, or an active broadcast-based attack.","Anycast is what lets services like public DNS resolvers respond fast globally — the 'same' IP is actually announced from many physical locations."],
+  },
+  {
+    name:"Routing Protocols — Static vs Dynamic",
+    desc:"Routers need to know how to reach other networks. Static routes are manually configured; dynamic routing protocols let routers learn and adapt automatically.",
+    diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <rect class="box" x="15" y="15" width="270" height="115" rx="6"/>
+      <text class="h" x="30" y="40">Static Routing</text>
+      <text class="t" x="30" y="62" fill="#8fa898" font-size="11">Manually configured by an admin</text>
+      <text class="t" x="30" y="82" fill="#8fa898" font-size="11">Predictable, low overhead</text>
+      <text class="t" x="30" y="102" fill="#8fa898" font-size="11">Doesn't adapt if a link fails</text>
+      <rect class="box" x="315" y="15" width="270" height="115" rx="6"/>
+      <text class="h" x="330" y="40">Dynamic Routing</text>
+      <text class="t" x="330" y="62" fill="#8fa898" font-size="11">RIP, OSPF, EIGRP, BGP</text>
+      <text class="t" x="330" y="82" fill="#8fa898" font-size="11">Routers exchange & learn routes</text>
+      <text class="t" x="330" y="102" fill="#8fa898" font-size="11">Self-heals around failures</text>
+    </svg>`,
+    points:["BGP is the protocol that runs the entire internet's inter-network routing — a BGP hijack (announcing routes you don't own) can redirect huge amounts of traffic, and has been used in real-world attacks.","Dynamic routing protocols without authentication can be manipulated by an attacker on the network to reroute or blackhole traffic.","In smaller or segmented networks, static routes are often preferred specifically because they're predictable and can't be silently changed by a rogue device."],
+  },
+  {
+    name:"MTU, Fragmentation & QoS",
+    desc:"MTU defines the largest packet a link can carry without breaking it up. Fragmentation and Quality of Service both affect performance — and both have been used in real attacks.",
+    diagram:`<svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;}</style>
+      <rect class="box" x="15" y="20" width="180" height="40" rx="4"/><text class="t" x="30" y="45">Oversized packet</text>
+      <text class="t" x="230" y="45" fill="#00ff41">→ fragmented into →</text>
+      <rect class="box" x="400" y="10" width="60" height="24" rx="3"/><text class="t" x="410" y="26" font-size="10">Frag 1</text>
+      <rect class="box" x="400" y="40" width="60" height="24" rx="3"/><text class="t" x="410" y="56" font-size="10">Frag 2</text>
+      <rect class="box" x="470" y="10" width="60" height="24" rx="3"/><text class="t" x="480" y="26" font-size="10">Frag 3</text>
+      <text class="t" x="15" y="100" fill="#8fa898" font-size="11">Default Ethernet MTU: 1500 bytes — larger payloads must fragment or use jumbo frames</text>
+    </svg>`,
+    points:["Fragmentation attacks (like teardrop, or crafted overlapping fragments) exploit how systems reassemble packets — a known historical DoS technique.","Firewalls and IDS that don't reassemble fragments properly can be evaded by attackers deliberately splitting malicious payloads across fragments.","QoS prioritizes certain traffic (like VoIP) over others — misconfigured QoS can itself become a denial-of-service vector by starving legitimate traffic."],
+  },
+  {
+    name:"DMZ — Demilitarized Zone",
+    desc:"A DMZ is a network segment that sits between the untrusted internet and the trusted internal network, hosting public-facing services while keeping them isolated from sensitive internal systems.",
+    diagram:`<svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;} .dmz{fill:rgba(255,189,46,0.08);stroke:#ffbd2e;}</style>
+      <rect class="box" x="10" y="55" width="110" height="50" rx="5"/><text class="t" x="25" y="83">Internet</text>
+      <rect class="dmz" x="230" y="20" width="160" height="120" rx="6"/>
+      <text class="t" x="245" y="42" fill="#ffbd2e" font-weight="700">DMZ</text>
+      <text class="t" x="245" y="65" font-size="10" fill="#8fa898">Web server</text>
+      <text class="t" x="245" y="85" font-size="10" fill="#8fa898">Mail server</text>
+      <text class="t" x="245" y="105" font-size="10" fill="#8fa898">Public DNS</text>
+      <rect class="box" x="500" y="55" width="110" height="50" rx="5"/><text class="t" x="510" y="78" font-size="11">Internal LAN</text><text class="t" x="510" y="94" font-size="9" fill="#8fa898">Databases, staff</text>
+      <line x1="120" y1="80" x2="230" y2="80" stroke="#00ff41"/>
+      <line x1="390" y1="80" x2="500" y2="80" stroke="#00ff41"/>
+    </svg>`,
+    points:["If a DMZ web server is compromised, the whole point is that the attacker still can't directly reach the internal LAN without crossing another firewall boundary.","A poorly configured DMZ — one with unrestricted access back to internal systems — defeats its own purpose and is a common finding in network security reviews.","Modern cloud architectures replicate this same idea with public/private subnets and security groups instead of a physical DMZ segment."],
+  },
+  {
+    name:"Port Scanning Techniques",
+    desc:"Not all scans work the same way. Different scan types trade off speed, stealth, and reliability — and understanding them is core to both offensive recon and detecting recon against you.",
+    diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;fill:#00ff41;}</style>
+      ${[
+        ["TCP Connect","Completes full handshake — reliable, but noisy & logged"],
+        ["SYN (half-open)","Sends SYN, drops before ACK — faster, stealthier"],
+        ["FIN / Xmas / Null","Sends unusual flag combos — evades some basic filters"],
+        ["UDP Scan","Sends UDP datagrams — slow, ambiguous results"],
+      ].map((r,i)=>`
+        <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
+        <text class="p" x="24" y="${33+i*42}">${r[0]}</text>
+        <text class="t" x="200" y="${33+i*42}" fill="#8fa898">${r[1]}</text>
+      `).join('')}
+    </svg>`,
+    points:["A SYN scan is Nmap's default (-sS) specifically because it's faster and leaves fewer complete-connection logs than a full connect scan.","FIN/Xmas/Null scans exploit how some older or misconfigured stacks respond to unexpected flag combinations — many modern systems aren't fooled anymore.","From the defensive side, a burst of half-open connections or odd flag combinations hitting many ports in sequence is a textbook IDS signature for 'someone is scanning us.'"],
+  },
+  {
+    name:"Packet Sniffing & Analysis",
+    desc:"Capturing and reading raw traffic is one of the most fundamental skills in both offense and defense — it's how you verify what's actually happening on the wire, not what you assume is happening.",
+    diagram:`<svg viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <rect class="box" x="10" y="15" width="580" height="90" rx="6"/>
+      <text class="t" x="25" y="38" fill="#00ff41" font-weight="700">Wireshark filter examples:</text>
+      <text class="t" x="25" y="58">tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0</text>
+      <text class="t" x="25" y="76">http.request.method=="POST"</text>
+      <text class="t" x="25" y="94">ip.addr==192.168.1.5 &amp;&amp; dns</text>
+    </svg>`,
+    points:["Tools like Wireshark (GUI) and tcpdump (CLI) both read the same underlying packet data — knowing filter syntax in either is a genuinely daily-use skill.","On a switched network, sniffing requires either port mirroring/SPAN, a network tap, or techniques like ARP spoofing to redirect traffic your way — you don't see everything by default.","Reading a capture systematically — handshake, then payload, then teardown — is how analysts confirm an alert is real instead of trusting a tool's verdict blindly."],
+  },
+  {
+    name:"DDoS Attack Types",
+    desc:"Denial-of-service attacks aim to exhaust a target's resources rather than breach it. They break down into three broad categories, each attacking a different layer.",
+    diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;}</style>
+      ${[
+        ["Volumetric","Floods raw bandwidth","UDP flood, DNS/NTP amplification"],
+        ["Protocol","Exhausts server/connection state","SYN flood, ping of death"],
+        ["Application (L7)","Exhausts app resources with valid-looking requests","HTTP flood, Slowloris"],
+      ].map((r,i)=>`
+        <rect class="row" x="10" y="${10+i*48}" width="580" height="42" rx="4"/>
+        <text class="p" x="24" y="${36+i*48}">${r[0]}</text>
+        <text class="t" x="180" y="${30+i*48}" fill="#8fa898" font-size="11">${r[1]}</text>
+        <text class="t" x="180" y="${46+i*48}" fill="#8fa898" font-size="10">${r[2]}</text>
+      `).join('')}
+    </svg>`,
+    points:["Volumetric attacks are measured in Gbps/Tbps and typically mitigated upstream by ISPs or scrubbing services — a single server can't absorb them.","Application-layer DDoS is harder to detect because the requests look legitimate; it's usually caught by rate-limiting, WAF rules, and behavioral analysis rather than raw traffic volume.","Botnets (networks of compromised devices, notably IoT devices in attacks like Mirai) are the typical source of large-scale volumetric DDoS traffic."],
+  },
+  {
+    name:"Zero Trust Architecture",
+    desc:"Zero Trust flips the old model of 'trust everything inside the perimeter' to 'verify every request, every time, regardless of where it comes from.' It's the direction most modern enterprise security is moving toward.",
+    diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;} .old{fill:rgba(255,59,59,0.06);stroke:#ff3b3b;}</style>
+      <text class="t" x="15" y="18" fill="#ff3b3b">Old model — trust the perimeter</text>
+      <rect class="old" x="15" y="28" width="260" height="50" rx="6"/>
+      <text class="t" x="30" y="58" font-size="11">Inside firewall = trusted, full access</text>
+      <text class="t" x="330" y="18" fill="#00ff41">Zero Trust — verify every request</text>
+      <rect class="box" x="330" y="28" width="260" height="50" rx="6"/>
+      <text class="t" x="345" y="50" font-size="11">Every request authenticated,</text>
+      <text class="t" x="345" y="66" font-size="11">authorized, and encrypted — always</text>
+      <text class="t" x="15" y="115" fill="#8fa898" font-size="11">Core idea: "never trust, always verify" — even for traffic already inside the network</text>
+    </svg>`,
+    points:["Zero Trust assumes breach — the question isn't 'did the attacker get past the firewall' but 'what can they actually reach once they're in,' which is why it pairs so closely with segmentation and least-privilege access.","Multi-factor authentication, micro-segmentation, and continuous verification (not just login-time checks) are the practical building blocks of a Zero Trust deployment.","This model exists specifically because MITM, insider threats, and lateral movement all rely on the old assumption that 'inside the network' means 'safe' — Zero Trust removes that assumption entirely."],
+  },
+  {
+    name:"SIEM & Centralized Logging",
+    desc:"A SIEM aggregates logs from across an entire environment — firewalls, servers, endpoints — into one place to correlate events and spot patterns no single log source would reveal alone.",
+    diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      ${[["Firewall",10],["Servers",130],["Endpoints",250],["Cloud apps",370]].map(s=>`
+        <rect class="box" x="${s[1]}" y="10" width="100" height="35" rx="4"/><text class="t" x="${s[1]+10}" y="32" font-size="10">${s[0]}</text>
+        <line class="ln" x1="${s[1]+50}" y1="45" x2="300" y2="100" marker-end="url(#a11)"/>
+      `).join('')}
+      <rect class="box" x="220" y="100" width="160" height="50" rx="6"/><text class="t" x="235" y="130" fill="#00ff41" font-weight="700">SIEM</text>
+      <defs><marker id="a11" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#00ff41"/></marker></defs>
+    </svg>`,
+    points:["Tools like Splunk, ELK, and QRadar are the industry-standard SIEM platforms — SOC analysts spend most of their day working inside one.","Correlation rules are what turn raw logs into alerts — e.g. a failed login from five countries in ten minutes is only meaningful once logs are aggregated and compared.","Syslog is the common standard many devices use to ship logs to a central collector — understanding it is foundational to setting up any centralized monitoring."],
+  },
+];
+
+
+/* ---------- RENDER TOOLS ---------- */
+const toolsGrid = document.getElementById('toolsGrid');
+toolsGrid.innerHTML = TOOLS.map(t => `
+  <div class="tool-card">
+    <h3>${t.name}</h3>
+    <div class="tool-purpose">${t.purpose}</div>
+    <p>${t.desc}</p>
+  </div>
+`).join('');
+
+/* ---------- RENDER NETWORKING ---------- */
+const networkingGrid = document.getElementById('networkingGrid');
+NETWORKING.forEach((n, i) => n._idx = i);
+networkingGrid.innerHTML = NETWORKING.map(n => `
+  <div class="domain-card" data-idx="${n._idx}">
+    <div class="domain-head" data-toggle="${n._idx}">
+      <span class="domain-num">${String(n._idx + 1).padStart(2,'0')}</span>
+      <span class="domain-name">${n.name}</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="domain-body">
+      <div class="domain-body-inner">
+        <p class="domain-desc">${n.desc}</p>
+        <div class="diagram-wrap">${n.diagram}</div>
+        <div class="guide-block net-points">
+          <h4>Why it matters in security</h4>
+          <ul>${n.points.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  </div>
+`).join('');
+
+networkingGrid.addEventListener('click', (e) => {
+  const head = e.target.closest('.domain-head');
+  if(!head) return;
+  head.closest('.domain-card').classList.toggle('open');
+});
+
+/* ---------- RENDER DOMAINS ---------- */
+const domainsGrid = document.getElementById('domainsGrid');
+const noResults = document.getElementById('noResults');
+
+function renderDomains(list){
+  if(list.length === 0){
+    domainsGrid.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  noResults.style.display = 'none';
+  domainsGrid.innerHTML = list.map((d, i) => `
+    <div class="domain-card" data-idx="${d._idx}">
+      <div class="domain-head" data-toggle="${d._idx}">
+        <span class="domain-num">${String(d._idx + 1).padStart(2,'0')}</span>
+        <span class="domain-name">${d.name}</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="domain-body">
+        <div class="domain-body-inner">
+          <p class="domain-desc">${d.desc}</p>
+          <div class="guide-grid">
+            <div class="guide-block">
+              <h4>Certifications Required</h4>
+              <ul>${d.certs.map(c => `<li><b>${c.n}</b><br>${c.c} · ${c.t}</li>`).join('')}</ul>
+            </div>
+            <div class="guide-block">
+              <h4>Lab / Practical Training</h4>
+              <ul>${d.labs.map(l => `<li><b>${l.n}</b><br>${l.c}</li>`).join('')}</ul>
+            </div>
+            <div class="guide-block">
+              <h4>Tools Used</h4>
+              <div class="chip-row">${d.tools.map(t => `<span class="chip">${t}</span>`).join('')}</div>
+            </div>
+            <div class="guide-block">
+              <h4>Career Path</h4>
+              <p class="plain">${d.career}</p>
+            </div>
+            <div class="guide-block">
+              <h4>Top Companies Hiring</h4>
+              <p class="plain">${d.companies}</p>
+            </div>
+            <div class="guide-block">
+              <h4>Skills Required</h4>
+              <div class="chip-row">${d.skills.map(s => `<span class="chip">${s}</span>`).join('')}</div>
+            </div>
+          </div>
+          <div class="stat-pair">
+            <div class="stat"><b>${d.cost}</b><span>Estimated Total Cost</span></div>
+            <div class="stat"><b>${d.time}</b><span>Time Required</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+DOMAINS.forEach((d, i) => d._idx = i);
+renderDomains(DOMAINS);
+
+domainsGrid.addEventListener('click', (e) => {
+  const head = e.target.closest('.domain-head');
+  if(!head) return;
+  const card = head.closest('.domain-card');
+  card.classList.toggle('open');
+});
+
+/* search filter */
+document.getElementById('domainSearch').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = DOMAINS.filter(d =>
+    d.name.toLowerCase().includes(q) ||
+    d.desc.toLowerCase().includes(q) ||
+    d.skills.some(s => s.toLowerCase().includes(q))
+  );
+  renderDomains(filtered);
+});
+
+/* ---------- MATRIX RAIN BACKGROUND ---------- */
+(function(){
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  const glyphs = 'アイウエオカキクケコサシスセソ01アクセスOSINTHACKROOTADMIN$#@%&'.split('');
+  let cols, drops, w, h;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    cols = Math.floor(w / 18);
+    drops = new Array(cols).fill(0).map(() => Math.random() * -40);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw(){
+    ctx.fillStyle = 'rgba(10,10,10,0.14)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = '15px monospace';
+    for(let i = 0; i < cols; i++){
+      const text = glyphs[Math.floor(Math.random() * glyphs.length)];
+      const x = i * 18;
+      const y = drops[i] * 18;
+      const grad = ctx.createLinearGradient(0, y - 40, 0, y);
+      grad.addColorStop(0, 'rgba(0,255,65,0)');
+      grad.addColorStop(1, 'rgba(0,255,65,0.85)');
+      ctx.fillStyle = grad;
+      ctx.fillText(text, x, y);
+      if(y > h && Math.random() > 0.975){
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 55);
+})();
+
+/* ---------- HERO TERMINAL TYPE EFFECT ---------- */
+const heroTerm = document.getElementById('heroTerm');
+const termLine = '> initializing MR CYBER intelligence node...';
+let ti = 0;
+function typeTerm(){
+  if(ti <= termLine.length){
+    heroTerm.innerHTML = termLine.slice(0, ti) + '<span class="cursor"></span>';
+    ti++;
+    setTimeout(typeTerm, 32);
+  }
+}
+typeTerm();
+
+/* ---------- NETWORKING SECTION TOGGLE ---------- */
+const networkingSection = document.getElementById('networking');
+const navNetworking = document.getElementById('navNetworking');
+const closeNetworking = document.getElementById('closeNetworking');
+
+function openNetworking(){
+  networkingSection.classList.add('section-visible');
+  networkingSection.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function closeNetworkingSection(){
+  networkingSection.classList.remove('section-visible');
+}
+
+navNetworking.addEventListener('click', (e) => {
+  e.preventDefault();
+  if(networkingSection.classList.contains('section-visible')){
+    closeNetworkingSection();
+  } else {
+    openNetworking();
+  }
+});
+closeNetworking.addEventListener('click', () => {
+  closeNetworkingSection();
+  document.getElementById('tools').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- MOBILE NAV ---------- */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mainNav = document.getElementById('mainNav');
+hamburgerBtn.addEventListener('click', () => mainNav.classList.toggle('open'));
+mainNav.querySelectorAll('a, button').forEach(el => el.addEventListener('click', () => mainNav.classList.remove('open')));
+
+/* ---------- CONTACT FORM (client-side only, no backend) ---------- */
+document.getElementById('contactForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  const name = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const subject = document.getElementById('cfSubject').value.trim();
+  const message = document.getElementById('cfMessage').value.trim();
+  if(!name || !email || !subject || !message){
+    note.style.color = 'var(--danger)';
+    note.textContent = 'Fill in every field before sending.';
+    return;
+  }
+  note.style.color = 'var(--neon)';
+  note.textContent = `Message ready — connect a backend or mail service to actually deliver this.`;
+  e.target.reset();
+});
+</script>
+</body>
+</html>
