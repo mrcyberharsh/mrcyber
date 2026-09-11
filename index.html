@@ -10,18 +10,18 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0a0a;
-    --bg-raised:#0e130f;
-    --neon:#00ff41;
-    --neon-dim:rgba(0,255,65,0.35);
-    --neon-faint:rgba(0,255,65,0.12);
-    --text:#e6f5e9;
-    --text-dim:#8fa898;
-    --text-faint:#5c6e61;
-    --border:rgba(0,255,65,0.18);
-    --border-strong:rgba(0,255,65,0.4);
+    --bg:#000000;
+    --bg-raised:#05070d;
+    --neon:#2f7dff;
+    --neon-dim:rgba(47,125,255,0.35);
+    --neon-faint:rgba(47,125,255,0.12);
+    --text:#ffffff;
+    --text-dim:#aab4cc;
+    --text-faint:#6a7390;
+    --border:rgba(47,125,255,0.18);
+    --border-strong:rgba(47,125,255,0.4);
     --glass:rgba(255,255,255,0.03);
-    --glass-hover:rgba(0,255,65,0.05);
+    --glass-hover:rgba(47,125,255,0.05);
     --danger:#ff3b3b;
     --font-mono:'JetBrains Mono', monospace;
     --font-body:'Inter', sans-serif;
@@ -51,14 +51,14 @@
   .bg-grid{
     position:fixed;inset:0;z-index:-2;
     background-image:
-      linear-gradient(rgba(0,255,65,0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,65,0.045) 1px, transparent 1px);
+      linear-gradient(rgba(47,125,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47,125,255,0.045) 1px, transparent 1px);
     background-size:42px 42px;
     mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
   }
   .bg-scan{
     position:fixed;inset:0;z-index:-1;pointer-events:none;
-    background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,255,65,0.012) 3px, rgba(0,0,0,0) 4px);
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(47,125,255,0.012) 3px, rgba(0,0,0,0) 4px);
   }
 
   /* header */
@@ -113,7 +113,7 @@
     font-family:var(--font-mono);font-weight:800;
     font-size:clamp(48px,9vw,108px);letter-spacing:2px;
     color:var(--text);
-    text-shadow:0 0 24px var(--neon-dim), 0 0 60px rgba(0,255,65,0.15);
+    text-shadow:0 0 24px var(--neon-dim), 0 0 60px rgba(47,125,255,0.15);
     margin-bottom:8px;
   }
   .hero h1 span{color:var(--neon);}
@@ -215,11 +215,15 @@
 
   .no-results{text-align:center;color:var(--text-faint);font-family:var(--font-mono);font-size:13px;padding:40px 0;display:none;}
 
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
   #networking{display:none;}
   #networking.section-visible{display:block;animation:fadeIn 0.35s ease;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
   .diagram-wrap{
-    background:rgba(0,255,65,0.035);border:1px solid var(--border);border-radius:10px;
+    background:rgba(47,125,255,0.035);border:1px solid var(--border);border-radius:10px;
     padding:22px;margin-bottom:24px;overflow-x:auto;
   }
   .diagram-wrap svg{width:100%;height:auto;display:block;min-width:520px;}
@@ -250,12 +254,15 @@
   .contact-info-item{margin-bottom:26px;}
   .contact-info-item .label{font-family:var(--font-mono);font-size:11px;color:var(--neon);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
   .contact-info-item .value{font-size:14px;color:var(--text-dim);}
-  .social-row{display:flex;gap:14px;margin-top:10px;}
+  .social-row{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;}
   .social-row a{
     font-family:var(--font-mono);font-size:12px;border:1px solid var(--border);
-    padding:8px 16px;border-radius:6px;color:var(--text-dim);transition:all 0.2s;
+    padding:9px 16px;border-radius:6px;color:var(--text-dim);transition:all 0.25s;
+    display:inline-flex;align-items:center;gap:8px;
   }
-  .social-row a:hover{color:var(--neon);border-color:var(--border-strong);}
+  .social-row a svg{width:15px;height:15px;fill:currentColor;transition:transform 0.25s;}
+  .social-row a:hover{color:var(--neon);border-color:var(--border-strong);box-shadow:0 0 16px var(--neon-faint);transform:translateY(-2px);}
+  .social-row a:hover svg{transform:scale(1.15);}
 
   form{display:flex;flex-direction:column;gap:14px;}
   form input, form textarea{
@@ -274,11 +281,28 @@
   .form-note{font-size:12px;color:var(--text-faint);text-align:center;margin-top:2px;min-height:16px;}
 
   footer{
-    text-align:center;padding:40px 6vw;border-top:1px solid var(--border);
+    padding:50px 6vw 30px;border-top:1px solid var(--border);
     font-family:var(--font-mono);font-size:12px;color:var(--text-faint);
   }
+  .footer-inner{
+    max-width:900px;margin:0 auto;display:flex;align-items:center;gap:26px;
+    flex-wrap:wrap;justify-content:center;text-align:left;padding-bottom:30px;
+  }
+  .footer-photo{
+    width:84px;height:84px;border-radius:50%;object-fit:cover;
+    border:2px solid var(--border-strong);box-shadow:0 0 22px var(--neon-faint);
+    flex-shrink:0;
+  }
+  .footer-info .fname{font-family:var(--font-mono);color:var(--neon);font-size:16px;font-weight:700;margin-bottom:4px;}
+  .footer-info .frole{color:var(--text-dim);font-size:12.5px;margin-bottom:8px;}
+  .footer-info .fsocial{display:flex;gap:14px;}
+  .footer-info .fsocial a{color:var(--text-faint);transition:color 0.2s;display:inline-flex;}
+  .footer-info .fsocial a:hover{color:var(--neon);}
+  .footer-info .fsocial svg{width:16px;height:16px;fill:currentColor;}
+  .footer-bottom{text-align:center;border-top:1px solid var(--border);padding-top:22px;}
   footer .credit{margin-top:6px;}
   footer .emails{margin-top:10px;color:var(--text-faint);}
+  @media(max-width:520px){.footer-inner{flex-direction:column;text-align:center;}.footer-info .fsocial{justify-content:center;}}
 
   @media(max-width:820px){
     nav ul{display:none;}
@@ -324,7 +348,7 @@
 </section>
 
 <section id="tools">
-  <div class="section-head">
+  <div class="section-head reveal">
     <div class="eyebrow">Arsenal</div>
     <h2 class="section-title">OSINT &amp; Hacking Tools</h2>
     <p class="section-sub">Sixteen tools that power reconnaissance, exploitation, and analysis.</p>
@@ -343,7 +367,7 @@
 </section>
 
 <section id="domains">
-  <div class="section-head">
+  <div class="section-head reveal">
     <div class="eyebrow">Career Map</div>
     <h2 class="section-title">Cybersecurity Domains — Complete Guide</h2>
     <p class="section-sub">Click any domain to view its full guide: certifications, labs, tools, cost, career path, and more.</p>
@@ -362,7 +386,7 @@
     <h2 class="section-title">About MR CYBER</h2>
   </div>
   <div class="about-wrap">
-    <div class="about-card">
+    <div class="about-card reveal">
       <div class="about-name">Harsh Saini</div>
       <p class="about-desc">A self-taught cybersecurity enthusiast and OSINT explorer with 4+ years of experience in digital intelligence, technical operations, and cybersecurity. Passionate about building tools, mastering terminals, and operating at the intersection of data and defense.</p>
       <p class="about-philosophy">"Complex ko simple. Simple ko powerful."</p>
@@ -381,7 +405,7 @@
     <div class="eyebrow">Reach Out</div>
     <h2 class="section-title">Contact MR CYBER</h2>
   </div>
-  <div class="contact-wrap">
+  <div class="contact-wrap reveal">
     <div>
       <div class="contact-info-item">
         <div class="label">Developer Email</div>
@@ -394,8 +418,9 @@
       <div class="contact-info-item">
         <div class="label">Social</div>
         <div class="social-row">
-          <a href="https://github.com/mrcyberharsh" target="_blank" rel="noopener">GitHub</a>
-          <a href="#" target="_blank" rel="noopener"
+          <a href="https://github.com/mrcyberharsh" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.16.69-3.83-1.52-3.83-1.52-.52-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.52-.29-5.17-1.26-5.17-5.6 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.16a10.9 10.9 0 0 1 5.72 0c2.18-1.47 3.14-1.16 3.14-1.16.62 1.57.23 2.73.11 3.02.73.79 1.17 1.8 1.17 3.04 0 4.35-2.66 5.31-5.19 5.59.41.35.77 1.04.77 2.1v3.11c0 .3.21.66.79.55 4.51-1.5 7.77-5.76 7.77-10.78C23.02 5.24 18.27.5 12 .5Z"/></svg>GitHub</a>
+          <a href="https://www.linkedin.com/in/harsh-saini-a7866641b" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>LinkedIn</a>
+          <a href="mailto:cyber.h4rsh@zohomail.in"><svg viewBox="0 0 24 24"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6.05L19.8 6H4.2Zm15.8 1.6-7.53 5.84a1 1 0 0 1-1.24 0L4 7.6V18h16V7.6Z"/></svg>Email</a>
         </div>
       </div>
     </div>
@@ -411,9 +436,23 @@
 </section>
 
 <footer>
-  <div>© 2026 MR CYBER — All Rights Reserved</div>
-  <div class="credit">Designed by Harsh Saini</div>
-  <div class="emails">manager.prachi@zohomail.in&nbsp;&nbsp;|&nbsp;&nbsp;manager.prachi@zohomail.in</div>
+  <div class="footer-inner">
+    <img src="profile.jpg" alt="Harsh Saini" class="footer-photo" onerror="this.style.display='none'">
+    <div class="footer-info">
+      <div class="fname">Harsh Saini</div>
+      <div class="frole">Founder, MR CYBER — Cybersecurity &amp; OSINT</div>
+      <div class="fsocial">
+        <a href="https://github.com/mrcyberharsh" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.16.69-3.83-1.52-3.83-1.52-.52-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.52-.29-5.17-1.26-5.17-5.6 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.16a10.9 10.9 0 0 1 5.72 0c2.18-1.47 3.14-1.16 3.14-1.16.62 1.57.23 2.73.11 3.02.73.79 1.17 1.8 1.17 3.04 0 4.35-2.66 5.31-5.19 5.59.41.35.77 1.04.77 2.1v3.11c0 .3.21.66.79.55 4.51-1.5 7.77-5.76 7.77-10.78C23.02 5.24 18.27.5 12 .5Z"/></svg></a>
+        <a href="https://www.linkedin.com/in/harsh-saini-a7866641b" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg></a>
+        <a href="mailto:cyber.h4rsh@zohomail.in" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6.05L19.8 6H4.2Zm15.8 1.6-7.53 5.84a1 1 0 0 1-1.24 0L4 7.6V18h16V7.6Z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 MR CYBER — All Rights Reserved</div>
+    <div class="credit">Designed by Harsh Saini</div>
+    <div class="emails">cyber.h4rsh@zohomail.in&nbsp;&nbsp;|&nbsp;&nbsp;manager.prachi@zohomail.in</div>
+  </div>
 </footer>
 
 <script>
@@ -689,7 +728,7 @@ const NETWORKING = [
     name:"OSI Model — 7 Layers",
     desc:"The OSI model breaks network communication into seven layers. Attackers and defenders both think in these layers — a firewall operates differently than a web app scanner because they sit at different layers.",
     diagram:`<svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg">
-      <style>.lyr{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .num{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#00ff41;}</style>
+      <style>.lyr{fill:rgba(47,125,255,0.06);stroke:#2f7dff;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;} .num{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#2f7dff;}</style>
       ${[
         ["7","Application","HTTP, DNS, FTP, SMTP"],
         ["6","Presentation","Encryption, SSL/TLS, encoding"],
@@ -702,7 +741,7 @@ const NETWORKING = [
         <rect class="lyr" x="20" y="${10+i*40}" width="580" height="34" rx="4"/>
         <text class="num" x="34" y="${32+i*40}">L${row[0]}</text>
         <text class="lbl" x="70" y="${32+i*40}" font-weight="700">${row[1]}</text>
-        <text class="lbl" x="260" y="${32+i*40}" fill="#8fa898" font-size="11">${row[2]}</text>
+        <text class="lbl" x="260" y="${32+i*40}" fill="#aab4cc" font-size="11">${row[2]}</text>
       `).join('')}
     </svg>`,
     points:["Encapsulation adds a header per layer as data moves down the stack, and strips it on the way up.","Firewalls (L3/L4) filter by IP/port; WAFs and proxies (L7) inspect actual application content.","Most real attacks — phishing, SQLi, XSS — happen at L7, while sniffing and spoofing often target L2/L3."],
@@ -711,7 +750,7 @@ const NETWORKING = [
     name:"TCP/IP Model — 4 Layers",
     desc:"The OSI model is 7 layers for teaching; the TCP/IP model is the 4-layer model the internet actually runs on. Every protocol you'll ever touch — HTTP, TCP, IP, Ethernet — maps onto this simpler stack.",
     diagram:`<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
-      <style>.lyr{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .osi{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#8fa898;}</style>
+      <style>.lyr{fill:rgba(47,125,255,0.06);stroke:#2f7dff;stroke-width:1;} .lbl{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;} .osi{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#aab4cc;}</style>
       ${[
         ["Application","HTTP, DNS, FTP, SSH, SMTP","OSI L7 + L6 + L5"],
         ["Transport","TCP (reliable) / UDP (fast, no guarantee)","OSI L4"],
@@ -721,7 +760,7 @@ const NETWORKING = [
         <rect class="lyr" x="20" y="${10+i*58}" width="580" height="48" rx="4"/>
         <text class="lbl" x="34" y="${34+i*58}" font-weight="700">${row[0]}</text>
         <text class="osi" x="34" y="${50+i*58}">${row[1]}</text>
-        <text class="osi" x="440" y="${34+i*58}" fill="#00ff41">${row[2]}</text>
+        <text class="osi" x="440" y="${34+i*58}" fill="#2f7dff">${row[2]}</text>
       `).join('')}
     </svg>`,
     points:["This is the model that actually shows up in real tools — Wireshark's protocol column, packet headers, and RFCs all speak TCP/IP layering, not the full 7-layer OSI breakdown.","'Network Access' collapses OSI's Physical + Data Link into one layer — this is why a switch (L2) and a NIC/cable (L1) are often discussed together.","Understanding this mapping matters because job interviews and certs (Security+, Network+) test both models, and expect you to translate between them."],
@@ -730,21 +769,21 @@ const NETWORKING = [
     name:"TCP vs UDP",
     desc:"TCP and UDP are the two transport-layer protocols almost everything rides on. One guarantees delivery; the other trades reliability for speed — and the choice has real security implications.",
     diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:14px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .h{font-family:'JetBrains Mono',monospace;font-size:14px;fill:#2f7dff;font-weight:700;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
       <rect class="box" x="15" y="15" width="270" height="160" rx="6"/>
       <text class="h" x="30" y="40">TCP</text>
-      <text class="t" x="30" y="65" fill="#8fa898" font-size="11">Connection-oriented</text>
-      <text class="t" x="30" y="85" fill="#8fa898" font-size="11">3-way handshake required</text>
-      <text class="t" x="30" y="105" fill="#8fa898" font-size="11">Guarantees delivery & order</text>
-      <text class="t" x="30" y="125" fill="#8fa898" font-size="11">Used by: HTTP(S), SSH, FTP, SMTP</text>
-      <text class="t" x="30" y="150" fill="#8fa898" font-size="11">Slower, more overhead</text>
+      <text class="t" x="30" y="65" fill="#aab4cc" font-size="11">Connection-oriented</text>
+      <text class="t" x="30" y="85" fill="#aab4cc" font-size="11">3-way handshake required</text>
+      <text class="t" x="30" y="105" fill="#aab4cc" font-size="11">Guarantees delivery & order</text>
+      <text class="t" x="30" y="125" fill="#aab4cc" font-size="11">Used by: HTTP(S), SSH, FTP, SMTP</text>
+      <text class="t" x="30" y="150" fill="#aab4cc" font-size="11">Slower, more overhead</text>
       <rect class="box" x="315" y="15" width="270" height="160" rx="6"/>
       <text class="h" x="330" y="40">UDP</text>
-      <text class="t" x="330" y="65" fill="#8fa898" font-size="11">Connectionless</text>
-      <text class="t" x="330" y="85" fill="#8fa898" font-size="11">No handshake, just sends</text>
-      <text class="t" x="330" y="105" fill="#8fa898" font-size="11">No delivery guarantee</text>
-      <text class="t" x="330" y="125" fill="#8fa898" font-size="11">Used by: DNS, DHCP, VoIP, streaming, gaming</text>
-      <text class="t" x="330" y="150" fill="#8fa898" font-size="11">Faster, low overhead</text>
+      <text class="t" x="330" y="65" fill="#aab4cc" font-size="11">Connectionless</text>
+      <text class="t" x="330" y="85" fill="#aab4cc" font-size="11">No handshake, just sends</text>
+      <text class="t" x="330" y="105" fill="#aab4cc" font-size="11">No delivery guarantee</text>
+      <text class="t" x="330" y="125" fill="#aab4cc" font-size="11">Used by: DNS, DHCP, VoIP, streaming, gaming</text>
+      <text class="t" x="330" y="150" fill="#aab4cc" font-size="11">Faster, low overhead</text>
     </svg>`,
     points:["UDP's lack of a handshake is exactly what makes DNS amplification and NTP amplification DDoS attacks possible — an attacker spoofs the source IP and gets a much larger reply sent to the victim.","Nmap's UDP scan (-sU) is notoriously slower and less reliable than a TCP scan, because closed UDP ports often just stay silent instead of replying.","Knowing which protocol a service uses tells you what to expect in a packet capture — TCP shows a clear handshake/teardown; UDP just shows datagrams with no session state."],
   },
@@ -752,7 +791,7 @@ const NETWORKING = [
     name:"TCP Three-Way Handshake",
     desc:"Every reliable TCP connection — the basis of HTTP, SSH, and most services — starts with this exchange. Understanding it is essential for reading packet captures and spotting scans.",
     diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
-      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
       <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
       <text class="node" x="55" y="15">CLIENT</text>
@@ -763,7 +802,7 @@ const NETWORKING = [
       <text class="lbl2" x="210" y="100">2. ← SYN-ACK</text>
       <line class="ln" x1="90" y1="155" x2="470" y2="180" marker-end="url(#arrow)"/>
       <text class="lbl2" x="230" y="150">3. ACK →</text>
-      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["A half-open scan (SYN, no final ACK) is how tools like Nmap perform stealthy port scans.","A SYN flood — many SYNs, never completing the handshake — is a classic DoS technique.","Wireshark filters like tcp.flags.syn==1 && tcp.flags.ack==0 isolate handshake attempts in a capture."],
   },
@@ -771,7 +810,7 @@ const NETWORKING = [
     name:"DNS Resolution Flow",
     desc:"DNS turns domain names into IP addresses. It's also a frequent attack surface — cache poisoning, tunneling, and typosquatting all abuse this flow.",
     diagram:`<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
-      <style>.box{fill:rgba(0,255,65,0.06);stroke:#00ff41;stroke-width:1;} .t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .a{stroke:#00ff41;stroke-width:1;fill:none;}</style>
+      <style>.box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;stroke-width:1;} .t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .a{stroke:#2f7dff;stroke-width:1;fill:none;}</style>
       ${[["Client",20],["Resolver",165],["Root",310],["TLD (.com)",440],["Authoritative NS",575]].map(b=>`
         <rect class="box" x="${b[1]-55}" y="70" width="120" height="46" rx="6"/>
         <text class="t" x="${b[1]-55+10}" y="98" font-size="11">${b[0]}</text>
@@ -781,8 +820,8 @@ const NETWORKING = [
       <path class="a" d="M360,93 H385" marker-end="url(#a2)"/>
       <path class="a" d="M490,93 H520" marker-end="url(#a2)"/>
       <path class="a" d="M165,140 Q400,175 640,110" stroke-dasharray="3,4"/>
-      <text class="t" x="230" y="165" fill="#8fa898" font-size="10">resolved IP returned back to client</text>
-      <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#00ff41"/></marker></defs>
+      <text class="t" x="230" y="165" fill="#aab4cc" font-size="10">resolved IP returned back to client</text>
+      <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["A recursive resolver walks Root → TLD → Authoritative on the client's behalf and caches the result.","DNS spoofing/cache poisoning injects a false record so victims resolve a malicious IP for a real domain name.","OSINT tools like theHarvester and dnsrecon use this same chain to enumerate subdomains and mail servers."],
   },
@@ -790,7 +829,7 @@ const NETWORKING = [
     name:"DHCP — The DORA Process",
     desc:"DHCP automatically assigns IP addresses to devices joining a network. The four-step exchange is called DORA: Discover, Offer, Request, Acknowledge.",
     diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
-      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
       <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
       <text class="node" x="45" y="15">DHCP CLIENT</text>
@@ -799,7 +838,7 @@ const NETWORKING = [
       <line class="ln" x1="470" y1="85" x2="90" y2="102" marker-end="url(#a3)"/><text class="lbl2" x="200" y="82">2. ← OFFER</text>
       <line class="ln" x1="90" y1="122" x2="470" y2="139" marker-end="url(#a3)"/><text class="lbl2" x="200" y="119">3. REQUEST →</text>
       <line class="ln" x1="470" y1="159" x2="90" y2="176" marker-end="url(#a3)"/><text class="lbl2" x="200" y="156">4. ← ACK</text>
-      <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Rogue DHCP servers can hand out a malicious gateway/DNS, silently routing victims' traffic through an attacker (a classic MITM setup).","DHCP starvation attacks exhaust a server's IP pool by flooding it with fake DISCOVER requests.","Tools like Yersinia and dhcpstarv are used to test for these weaknesses in a lab."],
   },
@@ -807,7 +846,7 @@ const NETWORKING = [
     name:"Subnetting & CIDR",
     desc:"Subnetting divides a network into smaller segments. CIDR notation (like /24) tells you how many addresses a network/host portion covers — essential for reading scan results and scoping a pentest.",
     diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;} .t2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#8fa898;} .netbit{fill:rgba(0,255,65,0.22);stroke:#00ff41;} .hostbit{fill:rgba(255,255,255,0.03);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;} .t2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#aab4cc;} .netbit{fill:rgba(47,125,255,0.22);stroke:#2f7dff;} .hostbit{fill:rgba(255,255,255,0.03);stroke:#2f7dff;}</style>
       <text class="t" x="20" y="25">192.168.1.0 / 24</text>
       ${Array.from({length:32}).map((_,i)=>`<rect class="${i<24?'netbit':'hostbit'}" x="${20+i*17.5}" y="45" width="15" height="26" stroke-width="0.6"/>`).join('')}
       <text class="t2" x="20" y="92">← 24 network bits (192.168.1.x fixed)</text>
@@ -821,7 +860,7 @@ const NETWORKING = [
     name:"Common Ports & Protocols",
     desc:"Port numbers are the first thing any recon or scan reveals about a target. Knowing the common ones by memory speeds up every OSINT and pentest workflow.",
     diagram:`<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#2f7dff;font-weight:700;} .row{fill:rgba(47,125,255,0.04);stroke:#123322;}</style>
       ${[
         ["21","FTP","File transfer — often plaintext creds"],
         ["22","SSH","Encrypted remote shell access"],
@@ -835,7 +874,7 @@ const NETWORKING = [
         <rect class="row" x="10" y="${10+i*30}" width="580" height="26" rx="3"/>
         <text class="p" x="20" y="${28+i*30}">${r[0]}</text>
         <text class="t" x="70" y="${28+i*30}" font-weight="700">${r[1]}</text>
-        <text class="t" x="150" y="${28+i*30}" fill="#8fa898" font-size="11">${r[2]}</text>
+        <text class="t" x="150" y="${28+i*30}" fill="#aab4cc" font-size="11">${r[2]}</text>
       `).join('')}
     </svg>`,
     points:["An open, unexpected port (e.g. 3389 exposed to the internet) is one of the first red flags in any external assessment.","Service banners on these ports (grabbed via Nmap -sV) often reveal software versions — a direct lead to known CVEs.","Blocking or restricting legacy ports like 23 (Telnet) and 21 (FTP) is a standard hardening step in any network defense checklist."],
@@ -844,17 +883,17 @@ const NETWORKING = [
     name:"IP Addressing — IPv4 vs IPv6",
     desc:"Every device on a network needs an address. IPv4 is still dominant but exhausted in raw address space; IPv6 is the long-term replacement — both show up constantly in logs, scopes, and attack traffic.",
     diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#2f7dff;font-weight:700;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
       <rect class="box" x="15" y="15" width="270" height="120" rx="6"/>
       <text class="h" x="30" y="38">IPv4</text>
       <text class="t" x="30" y="62">192.168.1.10</text>
-      <text class="t" x="30" y="82" fill="#8fa898" font-size="11">32-bit · 4 octets · ~4.3B addresses</text>
-      <text class="t" x="30" y="102" fill="#8fa898" font-size="11">Needs NAT to cope with exhaustion</text>
+      <text class="t" x="30" y="82" fill="#aab4cc" font-size="11">32-bit · 4 octets · ~4.3B addresses</text>
+      <text class="t" x="30" y="102" fill="#aab4cc" font-size="11">Needs NAT to cope with exhaustion</text>
       <rect class="box" x="315" y="15" width="270" height="120" rx="6"/>
       <text class="h" x="330" y="38">IPv6</text>
       <text class="t" x="330" y="62" font-size="11">2001:0db8:85a3::8a2e:370:7334</text>
-      <text class="t" x="330" y="82" fill="#8fa898" font-size="11">128-bit · 8 groups · effectively unlimited</text>
-      <text class="t" x="330" y="102" fill="#8fa898" font-size="11">Built-in IPsec support, no NAT needed</text>
+      <text class="t" x="330" y="82" fill="#aab4cc" font-size="11">128-bit · 8 groups · effectively unlimited</text>
+      <text class="t" x="330" y="102" fill="#aab4cc" font-size="11">Built-in IPsec support, no NAT needed</text>
     </svg>`,
     points:["Private IPv4 ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) never route on the public internet — seeing one externally usually signals misconfiguration.","IPv6 is often overlooked by security tooling; attackers sometimes tunnel traffic over IPv6 specifically because older monitoring only watches IPv4.","Scanning tools need explicit IPv6 support (e.g. nmap -6) — a network can look fully patched on IPv4 and still be wide open on IPv6."],
   },
@@ -862,7 +901,7 @@ const NETWORKING = [
     name:"ARP & MAC Resolution",
     desc:"ARP maps an IP address to a physical MAC address on the local network segment. It's simple, trusted by default, and one of the most commonly abused protocols in local attacks.",
     diagram:`<svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg">
-      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <line class="ln" x1="90" y1="20" x2="90" y2="160" stroke-dasharray="3,4"/>
       <line class="ln" x1="470" y1="20" x2="470" y2="160" stroke-dasharray="3,4"/>
       <text class="node" x="40" y="15">HOST A</text>
@@ -871,7 +910,7 @@ const NETWORKING = [
       <text class="lbl2" x="130" y="55">1. Broadcast: Who has 192.168.1.5? →</text>
       <line class="ln" x1="470" y1="105" x2="90" y2="130" marker-end="url(#a4)"/>
       <text class="lbl2" x="150" y="100">2. ← Reply: I am, my MAC is AA:BB:CC...</text>
-      <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["ARP spoofing sends forged replies claiming an attacker's MAC owns the gateway's IP — the core technique behind local man-in-the-middle attacks.","Tools like arpspoof, Ettercap, and Bettercap automate this on a LAN; tools like arpwatch or arp -a monitoring help detect it.","Because ARP has no authentication built in, static ARP entries or dynamic ARP inspection (on managed switches) are the standard defenses."],
   },
@@ -879,15 +918,15 @@ const NETWORKING = [
     name:"Routing & Switching",
     desc:"Switches move traffic within a local network using MAC addresses (Layer 2); routers move traffic between networks using IP addresses (Layer 3). Knowing which device handles what narrows down where an attack or misconfiguration lives.",
     diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <rect class="box" x="10" y="55" width="90" height="50" rx="5"/><text class="t" x="25" y="85">PC / Host</text>
       <line class="ln" x1="100" y1="80" x2="170" y2="80" marker-end="url(#a5)"/>
-      <rect class="box" x="170" y="55" width="90" height="50" rx="5"/><text class="t" x="180" y="78">Switch</text><text class="t" x="180" y="94" fill="#8fa898" font-size="10">Layer 2 · MAC</text>
+      <rect class="box" x="170" y="55" width="90" height="50" rx="5"/><text class="t" x="180" y="78">Switch</text><text class="t" x="180" y="94" fill="#aab4cc" font-size="10">Layer 2 · MAC</text>
       <line class="ln" x1="260" y1="80" x2="330" y2="80" marker-end="url(#a5)"/>
-      <rect class="box" x="330" y="55" width="90" height="50" rx="5"/><text class="t" x="340" y="78">Router</text><text class="t" x="340" y="94" fill="#8fa898" font-size="10">Layer 3 · IP</text>
+      <rect class="box" x="330" y="55" width="90" height="50" rx="5"/><text class="t" x="340" y="78">Router</text><text class="t" x="340" y="94" fill="#aab4cc" font-size="10">Layer 3 · IP</text>
       <line class="ln" x1="420" y1="80" x2="490" y2="80" marker-end="url(#a5)"/>
       <rect class="box" x="490" y="55" width="100" height="50" rx="5"/><text class="t" x="505" y="85">Internet</text>
-      <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Switches build a MAC address table by watching traffic; flooding that table (MAC flooding) can force a switch to broadcast everything, letting an attacker sniff traffic meant for others.","Routing tables and default gateways are prime targets — poisoning them (or a rogue DHCP handing out a fake gateway) enables large-scale interception.","Understanding this split is why network diagrams during a pentest or incident matter: it tells you where to place a tap or where a compromise can actually spread."],
   },
@@ -895,16 +934,16 @@ const NETWORKING = [
     name:"NAT — Network Address Translation",
     desc:"NAT lets many internal private IPs share one public IP address. It's not a security feature by design, but it does obscure internal addressing from the outside.",
     diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <rect class="box" x="10" y="45" width="160" height="55" rx="5"/>
-      <text class="t" x="22" y="68">192.168.1.10:5000</text><text class="t" x="22" y="86" fill="#8fa898" font-size="10">Internal / Private</text>
+      <text class="t" x="22" y="68">192.168.1.10:5000</text><text class="t" x="22" y="86" fill="#aab4cc" font-size="10">Internal / Private</text>
       <line class="ln" x1="170" y1="72" x2="250" y2="72" marker-end="url(#a6)"/>
       <rect class="box" x="250" y="35" width="120" height="75" rx="5"/>
-      <text class="t" x="262" y="60" fill="#00ff41" font-weight="700">NAT Gateway</text><text class="t" x="262" y="80" fill="#8fa898" font-size="10">translates the</text><text class="t" x="262" y="94" fill="#8fa898" font-size="10">address + port</text>
+      <text class="t" x="262" y="60" fill="#2f7dff" font-weight="700">NAT Gateway</text><text class="t" x="262" y="80" fill="#aab4cc" font-size="10">translates the</text><text class="t" x="262" y="94" fill="#aab4cc" font-size="10">address + port</text>
       <line class="ln" x1="370" y1="72" x2="440" y2="72" marker-end="url(#a6)"/>
       <rect class="box" x="440" y="45" width="150" height="55" rx="5"/>
-      <text class="t" x="452" y="68">203.0.113.5:40001</text><text class="t" x="452" y="86" fill="#8fa898" font-size="10">Public / Internet-facing</text>
-      <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <text class="t" x="452" y="68">203.0.113.5:40001</text><text class="t" x="452" y="86" fill="#aab4cc" font-size="10">Public / Internet-facing</text>
+      <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["NAT is often mistaken for a firewall — it hides internal IPs but doesn't inspect or block traffic on its own.","Port forwarding (a common NAT config) intentionally punches a hole through to an internal host — a frequent source of accidental exposure on home and small-business networks.","During recon, seeing one public IP serve many services can hint at NAT with several internal hosts behind it."],
   },
@@ -912,12 +951,12 @@ const NETWORKING = [
     name:"VLANs & Network Segmentation",
     desc:"VLANs split one physical switch into multiple isolated logical networks. Segmentation is one of the most effective, boring, and underused defenses against lateral movement.",
     diagram:`<svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .cross{stroke:#ff3b3b;stroke-width:2;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .cross{stroke:#ff3b3b;stroke-width:2;}</style>
       <rect class="box" x="200" y="10" width="160" height="40" rx="5"/><text class="t" x="230" y="35">Switch (trunk)</text>
-      <rect class="box" x="20" y="90" width="200" height="60" rx="5"/><text class="t" x="35" y="115" fill="#00ff41" font-weight="700">VLAN 10 — Finance</text><text class="t" x="35" y="135" fill="#8fa898" font-size="10">Isolated broadcast domain</text>
-      <rect class="box" x="340" y="90" width="200" height="60" rx="5"/><text class="t" x="355" y="115" fill="#00ff41" font-weight="700">VLAN 20 — Guest Wi-Fi</text><text class="t" x="355" y="135" fill="#8fa898" font-size="10">No visibility into VLAN 10</text>
-      <line x1="120" y1="90" x2="120" y2="50" stroke="#00ff41"/>
-      <line x1="440" y1="90" x2="440" y2="50" stroke="#00ff41"/>
+      <rect class="box" x="20" y="90" width="200" height="60" rx="5"/><text class="t" x="35" y="115" fill="#2f7dff" font-weight="700">VLAN 10 — Finance</text><text class="t" x="35" y="135" fill="#aab4cc" font-size="10">Isolated broadcast domain</text>
+      <rect class="box" x="340" y="90" width="200" height="60" rx="5"/><text class="t" x="355" y="115" fill="#2f7dff" font-weight="700">VLAN 20 — Guest Wi-Fi</text><text class="t" x="355" y="135" fill="#aab4cc" font-size="10">No visibility into VLAN 10</text>
+      <line x1="120" y1="90" x2="120" y2="50" stroke="#2f7dff"/>
+      <line x1="440" y1="90" x2="440" y2="50" stroke="#2f7dff"/>
       <line class="cross" x1="230" y1="120" x2="330" y2="120"/>
       <line class="cross" x1="330" y1="105" x2="230" y2="135"/>
       <text class="t" x="235" y="160" fill="#ff3b3b" font-size="10">blocked by default without routing</text>
@@ -928,19 +967,19 @@ const NETWORKING = [
     name:"Firewalls & ACLs",
     desc:"Firewalls enforce which traffic is allowed to cross a boundary. Access Control Lists (ACLs) are the rule sets — usually evaluated top-down — that define exactly what's permitted or denied.",
     diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .mono{font-family:'JetBrains Mono',monospace;font-size:11px;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
-      <text class="t" x="15" y="20" fill="#8fa898">Untrusted Zone</text>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .mono{font-family:'JetBrains Mono',monospace;font-size:11px;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
+      <text class="t" x="15" y="20" fill="#aab4cc">Untrusted Zone</text>
       <rect class="box" x="15" y="35" width="90" height="40" rx="4"/><text class="t" x="30" y="60">Internet</text>
       <rect class="box" x="230" y="20" width="150" height="130" rx="6"/>
-      <text class="t" x="245" y="42" fill="#00ff41" font-weight="700">FIREWALL / ACL</text>
-      <text class="mono" x="245" y="65" fill="#e6f5e9">allow tcp 443 →</text>
-      <text class="mono" x="245" y="82" fill="#e6f5e9">allow tcp 22 (admin)</text>
+      <text class="t" x="245" y="42" fill="#2f7dff" font-weight="700">FIREWALL / ACL</text>
+      <text class="mono" x="245" y="65" fill="#ffffff">allow tcp 443 →</text>
+      <text class="mono" x="245" y="82" fill="#ffffff">allow tcp 22 (admin)</text>
       <text class="mono" x="245" y="99" fill="#ff3b3b">deny tcp 3389</text>
       <text class="mono" x="245" y="116" fill="#ff3b3b">deny all (implicit)</text>
-      <text class="t" x="500" y="20" fill="#8fa898">Trusted Zone</text>
+      <text class="t" x="500" y="20" fill="#aab4cc">Trusted Zone</text>
       <rect class="box" x="495" y="35" width="90" height="40" rx="4"/><text class="t" x="505" y="60">Internal LAN</text>
-      <line x1="105" y1="55" x2="230" y2="85" stroke="#00ff41"/>
-      <line x1="380" y1="85" x2="495" y2="55" stroke="#00ff41"/>
+      <line x1="105" y1="55" x2="230" y2="85" stroke="#2f7dff"/>
+      <line x1="380" y1="85" x2="495" y2="55" stroke="#2f7dff"/>
     </svg>`,
     points:["ACLs are read top to bottom — the first matching rule wins, so rule order is as important as the rules themselves.","Almost every ACL ends with an implicit deny-all — anything not explicitly allowed gets blocked by default (this is the whole point of least privilege).","Firewall misconfiguration (an overly broad allow rule, a forgotten temporary rule) is one of the most common findings in real security assessments."],
   },
@@ -948,12 +987,12 @@ const NETWORKING = [
     name:"VPN & Tunneling",
     desc:"A VPN wraps traffic in an encrypted tunnel between two points, making it unreadable and often unroutable to anything sitting in between — used both to protect legitimate traffic and, less legitimately, to hide malicious traffic.",
     diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .tunnel{fill:rgba(0,255,65,0.04);stroke:#00ff41;stroke-dasharray:4,3;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .tunnel{fill:rgba(47,125,255,0.04);stroke:#2f7dff;stroke-dasharray:4,3;}</style>
       <rect class="box" x="15" y="50" width="110" height="50" rx="5"/><text class="t" x="30" y="80">Client</text>
       <rect class="tunnel" x="150" y="35" width="300" height="80" rx="40"/>
-      <text class="t" x="200" y="80" fill="#00ff41" font-weight="700">Encrypted Tunnel</text>
-      <text class="t" x="200" y="100" fill="#8fa898" font-size="10">(over the public internet)</text>
-      <rect class="box" x="475" y="50" width="110" height="50" rx="5"/><text class="t" x="485" y="72">VPN</text><text class="t" x="485" y="88" fill="#8fa898" font-size="10">Gateway</text>
+      <text class="t" x="200" y="80" fill="#2f7dff" font-weight="700">Encrypted Tunnel</text>
+      <text class="t" x="200" y="100" fill="#aab4cc" font-size="10">(over the public internet)</text>
+      <rect class="box" x="475" y="50" width="110" height="50" rx="5"/><text class="t" x="485" y="72">VPN</text><text class="t" x="485" y="88" fill="#aab4cc" font-size="10">Gateway</text>
     </svg>`,
     points:["IPsec and SSL/TLS-based VPNs (like OpenVPN, WireGuard) differ in how they establish and encrypt the tunnel, but the goal is the same: confidentiality and integrity in transit.","From a defensive view, VPN gateways are high-value targets — a single compromised VPN credential often grants deep internal network access.","From an offensive/OSINT view, VPN exit nodes and Tor are common ways both attackers and researchers mask their true origin IP."],
   },
@@ -961,16 +1000,16 @@ const NETWORKING = [
     name:"Wireless Security — WEP to WPA3",
     desc:"Wi-Fi security has evolved through several protocols, each fixing weaknesses in the last. Knowing which one a network runs tells you almost instantly how vulnerable it is.",
     diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;} .row{fill:rgba(47,125,255,0.04);stroke:#123322;}</style>
       ${[
         ["WEP","Broken — crackable in minutes","#ff3b3b"],
         ["WPA","Legacy — TKIP, still weak","#ffbd2e"],
-        ["WPA2","Standard for years — AES/CCMP, vulnerable to KRACK","#8fa898"],
-        ["WPA3","Current — SAE handshake, resists offline cracking","#00ff41"],
+        ["WPA2","Standard for years — AES/CCMP, vulnerable to KRACK","#aab4cc"],
+        ["WPA3","Current — SAE handshake, resists offline cracking","#2f7dff"],
       ].map((r,i)=>`
         <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
         <text class="p" x="24" y="${33+i*42}" fill="${r[2]}">${r[0]}</text>
-        <text class="t" x="120" y="${33+i*42}" fill="#8fa898" font-size="11">${r[1]}</text>
+        <text class="t" x="120" y="${33+i*42}" fill="#aab4cc" font-size="11">${r[1]}</text>
       `).join('')}
     </svg>`,
     points:["Tools like Aircrack-ng capture a WPA/WPA2 handshake, then attempt offline dictionary or brute-force cracking against it.","Evil twin attacks clone a legitimate access point's SSID to trick devices into connecting to an attacker-controlled network instead.","WPA3's SAE handshake specifically defeats the offline handshake-capture-and-crack approach that made WPA2 practically attackable."],
@@ -979,17 +1018,17 @@ const NETWORKING = [
     name:"Proxies & Load Balancers",
     desc:"A proxy sits between a client and the destination, forwarding requests on its behalf. A load balancer distributes incoming traffic across multiple backend servers — both change what a scan or a packet capture actually shows you.",
     diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <rect class="box" x="15" y="65" width="90" height="45" rx="5"/><text class="t" x="30" y="92">Client</text>
       <line class="ln" x1="105" y1="87" x2="180" y2="87" marker-end="url(#a7)"/>
-      <rect class="box" x="180" y="60" width="130" height="55" rx="5"/><text class="t" x="195" y="82" font-weight="700" fill="#00ff41">Load Balancer</text><text class="t" x="195" y="100" fill="#8fa898" font-size="10">distributes requests</text>
+      <rect class="box" x="180" y="60" width="130" height="55" rx="5"/><text class="t" x="195" y="82" font-weight="700" fill="#2f7dff">Load Balancer</text><text class="t" x="195" y="100" fill="#aab4cc" font-size="10">distributes requests</text>
       <line class="ln" x1="310" y1="75" x2="400" y2="30" marker-end="url(#a7)"/>
       <line class="ln" x1="310" y1="87" x2="400" y2="87" marker-end="url(#a7)"/>
       <line class="ln" x1="310" y1="100" x2="400" y2="145" marker-end="url(#a7)"/>
       <rect class="box" x="400" y="10" width="120" height="35" rx="4"/><text class="t" x="415" y="32" font-size="11">Server 1</text>
       <rect class="box" x="400" y="70" width="120" height="35" rx="4"/><text class="t" x="415" y="92" font-size="11">Server 2</text>
       <rect class="box" x="400" y="128" width="120" height="35" rx="4"/><text class="t" x="415" y="150" font-size="11">Server 3</text>
-      <defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Scanning a load-balanced service can hit different backend servers on different requests — inconsistent results during a pentest often mean a load balancer is in play, not a flaky target.","Reverse proxies (like Nginx, Cloudflare) frequently sit in front of the real origin server, meaning the IP an attacker sees first isn't the actual host — a common OSINT trap when 'finding the real IP' behind a CDN.","Misconfigured proxies (open proxies, SSRF-vulnerable proxy endpoints) are their own class of finding in web app assessments."],
   },
@@ -997,20 +1036,20 @@ const NETWORKING = [
     name:"IDS / IPS — Detection vs Prevention",
     desc:"An Intrusion Detection System watches traffic and alerts on suspicious patterns. An Intrusion Prevention System sits inline and can actively block that traffic in real time.",
     diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
-      <text class="t" x="15" y="20" fill="#8fa898">IDS — passive, out-of-band</text>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
+      <text class="t" x="15" y="20" fill="#aab4cc">IDS — passive, out-of-band</text>
       <line class="ln" x1="15" y1="55" x2="300" y2="55" marker-end="url(#a8)"/>
       <rect class="box" x="120" y="65" width="80" height="35" rx="4"/><text class="t" x="132" y="87" font-size="10">IDS (tap)</text>
       <line class="ln" x1="160" y1="65" x2="160" y2="55" stroke-dasharray="2,3"/>
-      <text class="t" x="230" y="50" fill="#8fa898" font-size="10">traffic flows on unaffected</text>
+      <text class="t" x="230" y="50" fill="#aab4cc" font-size="10">traffic flows on unaffected</text>
 
-      <text class="t" x="15" y="130" fill="#8fa898">IPS — inline, can block</text>
+      <text class="t" x="15" y="130" fill="#aab4cc">IPS — inline, can block</text>
       <line class="ln" x1="15" y1="160" x2="120" y2="160" marker-end="url(#a8)"/>
-      <rect class="box" x="120" y="142" width="90" height="36" rx="4"/><text class="t" x="132" y="164" font-size="10" fill="#00ff41">IPS (inline)</text>
+      <rect class="box" x="120" y="142" width="90" height="36" rx="4"/><text class="t" x="132" y="164" font-size="10" fill="#2f7dff">IPS (inline)</text>
       <line class="ln" x1="210" y1="160" x2="320" y2="160" marker-end="url(#a8)"/>
-      <text class="t" x="330" y="150" fill="#8fa898" font-size="10">passes if clean,</text>
+      <text class="t" x="330" y="150" fill="#aab4cc" font-size="10">passes if clean,</text>
       <text class="t" x="330" y="164" fill="#ff3b3b" font-size="10">drops if malicious</text>
-      <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Signature-based detection catches known attack patterns fast but misses novel ones; anomaly-based detection catches the unknown but generates more false positives.","Tools like Snort and Suricata can run in either IDS (alert-only) or IPS (inline-blocking) mode depending on deployment.","A SOC analyst's daily work often centers on triaging IDS/IPS alerts — separating real incidents from the constant background noise of false positives."],
   },
@@ -1018,7 +1057,7 @@ const NETWORKING = [
     name:"SSL/TLS Handshake",
     desc:"TLS is what turns HTTP into HTTPS — encrypting traffic between client and server. The handshake negotiates encryption before a single byte of real data is sent.",
     diagram:`<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
-      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#e6f5e9;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.node{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#ffffff;font-weight:700;} .lbl2{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <line class="ln" x1="90" y1="20" x2="90" y2="200" stroke-dasharray="3,4"/>
       <line class="ln" x1="470" y1="20" x2="470" y2="200" stroke-dasharray="3,4"/>
       <text class="node" x="55" y="15">CLIENT</text>
@@ -1027,7 +1066,7 @@ const NETWORKING = [
       <line class="ln" x1="470" y1="85" x2="90" y2="105" marker-end="url(#a9)"/><text class="lbl2" x="130" y="82">2. ← Server Hello + Certificate</text>
       <line class="ln" x1="90" y1="125" x2="470" y2="145" marker-end="url(#a9)"/><text class="lbl2" x="140" y="122">3. Key exchange, session key derived →</text>
       <line class="ln" x1="470" y1="165" x2="90" y2="185" marker-end="url(#a9)"/><text class="lbl2" x="150" y="162">4. ← Finished — encrypted channel live</text>
-      <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["The certificate exchanged in step 2 is what browsers validate against a trusted Certificate Authority — a self-signed or expired cert is a common finding and a real attack vector.","SSL stripping downgrades a victim from HTTPS to HTTP mid-handshake, which is why HSTS (HTTP Strict Transport Security) exists as a defense.","Tools like sslyze and testssl.sh audit which weak ciphers or outdated TLS versions (like TLS 1.0) a server still accepts."],
   },
@@ -1035,14 +1074,14 @@ const NETWORKING = [
     name:"MITM Attacks — ARP & DNS Spoofing",
     desc:"Man-in-the-middle attacks insert the attacker between two communicating parties, letting them read or alter traffic neither side realizes is being intercepted.",
     diagram:`<svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .abox{fill:rgba(255,59,59,0.08);stroke:#ff3b3b;} .ln{stroke:#00ff41;stroke-width:1;} .lnbad{stroke:#ff3b3b;stroke-width:1;stroke-dasharray:4,3;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .abox{fill:rgba(255,59,59,0.08);stroke:#ff3b3b;} .ln{stroke:#2f7dff;stroke-width:1;} .lnbad{stroke:#ff3b3b;stroke-width:1;stroke-dasharray:4,3;}</style>
       <rect class="box" x="15" y="70" width="110" height="45" rx="5"/><text class="t" x="30" y="97">Client</text>
       <rect class="abox" x="215" y="10" width="130" height="45" rx="5"/><text class="t" x="230" y="37" fill="#ff3b3b" font-weight="700">Attacker</text>
       <rect class="box" x="435" y="70" width="110" height="45" rx="5"/><text class="t" x="445" y="97" font-size="11">Gateway / Server</text>
       <line class="lnbad" x1="125" y1="90" x2="215" y2="45"/>
       <line class="lnbad" x1="345" y1="45" x2="435" y2="90"/>
-      <text class="t" x="150" y="140" fill="#8fa898" font-size="10">Real traffic re-routed through the attacker,</text>
-      <text class="t" x="150" y="156" fill="#8fa898" font-size="10">who can read, log, or modify it silently</text>
+      <text class="t" x="150" y="140" fill="#aab4cc" font-size="10">Real traffic re-routed through the attacker,</text>
+      <text class="t" x="150" y="156" fill="#aab4cc" font-size="10">who can read, log, or modify it silently</text>
     </svg>`,
     points:["ARP spoofing (local network) and DNS spoofing (name resolution) are the two most common ways to establish this position without physical network access.","Detection relies on things like unexpected ARP table changes, certificate warnings (if traffic is HTTPS), or unusual latency — most victims never notice.","End-to-end encryption (proper TLS, certificate pinning) is the main defense — it doesn't stop the interception but makes the intercepted traffic unreadable."],
   },
@@ -1050,12 +1089,12 @@ const NETWORKING = [
     name:"Network Devices — Hub, Switch, Router, AP",
     desc:"The physical building blocks of any network. Knowing what each device actually does — and doesn't do — tells you where security controls belong.",
     diagram:`<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#00ff41;font-weight:700;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#2f7dff;font-weight:700;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
       ${[["Hub","Repeats to all ports — no intelligence, easy to sniff",0],["Switch","Forwards by MAC table — Layer 2 aware",150],["Router","Forwards by IP — connects separate networks",300],["Access Point","Bridges wired LAN to Wi-Fi clients",450]].map(d=>`
         <rect class="box" x="${d[2]+10}" y="15" width="130" height="70" rx="6"/>
         <text class="h" x="${d[2]+20}" y="42">${d[0]}</text>
-        <text class="t" x="${d[2]+20}" y="62" font-size="10" fill="#8fa898">${d[1].slice(0,26)}</text>
-        <text class="t" x="${d[2]+20}" y="76" font-size="10" fill="#8fa898">${d[1].slice(26)}</text>
+        <text class="t" x="${d[2]+20}" y="62" font-size="10" fill="#aab4cc">${d[1].slice(0,26)}</text>
+        <text class="t" x="${d[2]+20}" y="76" font-size="10" fill="#aab4cc">${d[1].slice(26)}</text>
       `).join('')}
     </svg>`,
     points:["Hubs are effectively obsolete but understanding them explains *why* switched networks are much harder to passively sniff than old shared-media ones.","A compromised switch or AP is a high-value target — controlling it means controlling what every connected device sees.","Rogue access points (unauthorized Wi-Fi hardware plugged into a network) are a classic physical-access attack vector covered in wireless security audits."],
@@ -1064,22 +1103,22 @@ const NETWORKING = [
     name:"Network Topologies",
     desc:"Topology describes how devices are physically or logically connected. It affects performance, single points of failure, and how far a compromise can spread.",
     diagram:`<svg viewBox="0 0 620 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .n{fill:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
-      <text class="t" x="30" y="15" fill="#00ff41" font-weight="700">Star</text>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#ffffff;} .n{fill:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
+      <text class="t" x="30" y="15" fill="#2f7dff" font-weight="700">Star</text>
       <circle class="n" cx="80" cy="70" r="5"/>
       ${[[40,40],[120,40],[40,100],[120,100]].map(p=>`<line class="ln" x1="80" y1="70" x2="${p[0]}" y2="${p[1]}"/><circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`).join('')}
 
-      <text class="t" x="200" y="15" fill="#00ff41" font-weight="700">Bus</text>
+      <text class="t" x="200" y="15" fill="#2f7dff" font-weight="700">Bus</text>
       <line class="ln" x1="190" y1="70" x2="330" y2="70"/>
       ${[190,230,270,310].map(x=>`<circle class="n" cx="${x}" cy="70" r="4"/>`).join('')}
 
-      <text class="t" x="380" y="15" fill="#00ff41" font-weight="700">Ring</text>
+      <text class="t" x="380" y="15" fill="#2f7dff" font-weight="700">Ring</text>
       ${[[420,45],[460,45],[480,80],[460,115],[420,115],[400,80]].map((p,i,arr)=>{
         const next = arr[(i+1)%arr.length];
         return `<line class="ln" x1="${p[0]}" y1="${p[1]}" x2="${next[0]}" y2="${next[1]}"/><circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`;
       }).join('')}
 
-      <text class="t" x="510" y="15" fill="#00ff41" font-weight="700">Mesh</text>
+      <text class="t" x="510" y="15" fill="#2f7dff" font-weight="700">Mesh</text>
       ${[[540,45],[590,45],[540,100],[590,100]].map((p,i,arr)=>arr.map(q=>p!==q?`<line class="ln" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke-opacity="0.5"/>`:'').join('')).join('')}
       ${[[540,45],[590,45],[540,100],[590,100]].map(p=>`<circle class="n" cx="${p[0]}" cy="${p[1]}" r="4"/>`).join('')}
     </svg>`,
@@ -1089,12 +1128,12 @@ const NETWORKING = [
     name:"ICMP, Ping & Traceroute",
     desc:"ICMP is used for diagnostics and error reporting rather than carrying application data — ping and traceroute are built on it, and so are several classic attacks.",
     diagram:`<svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       <rect class="box" x="15" y="50" width="100" height="45" rx="5"/><text class="t" x="30" y="77">You</text>
-      <line class="ln" x1="115" y1="65" x2="440" y2="65" marker-end="url(#a10)"/><text class="t" x="180" y="58" fill="#00ff41" font-size="11">Echo Request (ping) →</text>
-      <line class="ln" x1="440" y1="90" x2="115" y2="90" marker-end="url(#a10)"/><text class="t" x="180" y="110" fill="#00ff41" font-size="11">← Echo Reply</text>
+      <line class="ln" x1="115" y1="65" x2="440" y2="65" marker-end="url(#a10)"/><text class="t" x="180" y="58" fill="#2f7dff" font-size="11">Echo Request (ping) →</text>
+      <line class="ln" x1="440" y1="90" x2="115" y2="90" marker-end="url(#a10)"/><text class="t" x="180" y="110" fill="#2f7dff" font-size="11">← Echo Reply</text>
       <rect class="box" x="440" y="50" width="100" height="45" rx="5"/><text class="t" x="450" y="77" font-size="11">Target</text>
-      <defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00ff41"/></marker></defs>
+      <defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Traceroute works by sending packets with increasing TTL values and recording which router sends back a 'TTL exceeded' — mapping the path hop by hop.","ICMP flood (ping flood) and the Smurf attack (spoofed broadcast pings) are classic ICMP-based denial-of-service techniques.","Many networks rate-limit or block ICMP at the perimeter specifically because it's such a common recon and DoS tool — but this also breaks legitimate diagnostics, a real trade-off admins have to weigh."],
   },
@@ -1102,7 +1141,7 @@ const NETWORKING = [
     name:"IP Address Types",
     desc:"Not all traffic goes to just one destination. Knowing the difference between these delivery types matters for both network design and spotting abnormal traffic.",
     diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .row{fill:rgba(47,125,255,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#2f7dff;}</style>
       ${[
         ["Unicast","One sender → one specific receiver","Normal web browsing, SSH"],
         ["Broadcast","One sender → every host on the segment","DHCP Discover, ARP requests"],
@@ -1111,8 +1150,8 @@ const NETWORKING = [
       ].map((r,i)=>`
         <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
         <text class="p" x="24" y="${33+i*42}">${r[0]}</text>
-        <text class="t" x="150" y="${33+i*42}" fill="#e6f5e9" font-size="11">${r[1]}</text>
-        <text class="t" x="400" y="${33+i*42}" fill="#8fa898" font-size="10">${r[2]}</text>
+        <text class="t" x="150" y="${33+i*42}" fill="#ffffff" font-size="11">${r[1]}</text>
+        <text class="t" x="400" y="${33+i*42}" fill="#aab4cc" font-size="10">${r[2]}</text>
       `).join('')}
     </svg>`,
     points:["Broadcast traffic is limited to a single subnet/broadcast domain — this is one practical reason VLANs and subnetting reduce noise and attack surface.","A flood of unexpected broadcast traffic is a classic symptom of a misconfigured device, a loop, or an active broadcast-based attack.","Anycast is what lets services like public DNS resolvers respond fast globally — the 'same' IP is actually announced from many physical locations."],
@@ -1121,17 +1160,17 @@ const NETWORKING = [
     name:"Routing Protocols — Static vs Dynamic",
     desc:"Routers need to know how to reach other networks. Static routes are manually configured; dynamic routing protocols let routers learn and adapt automatically.",
     diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .h{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#2f7dff;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
       <rect class="box" x="15" y="15" width="270" height="115" rx="6"/>
       <text class="h" x="30" y="40">Static Routing</text>
-      <text class="t" x="30" y="62" fill="#8fa898" font-size="11">Manually configured by an admin</text>
-      <text class="t" x="30" y="82" fill="#8fa898" font-size="11">Predictable, low overhead</text>
-      <text class="t" x="30" y="102" fill="#8fa898" font-size="11">Doesn't adapt if a link fails</text>
+      <text class="t" x="30" y="62" fill="#aab4cc" font-size="11">Manually configured by an admin</text>
+      <text class="t" x="30" y="82" fill="#aab4cc" font-size="11">Predictable, low overhead</text>
+      <text class="t" x="30" y="102" fill="#aab4cc" font-size="11">Doesn't adapt if a link fails</text>
       <rect class="box" x="315" y="15" width="270" height="115" rx="6"/>
       <text class="h" x="330" y="40">Dynamic Routing</text>
-      <text class="t" x="330" y="62" fill="#8fa898" font-size="11">RIP, OSPF, EIGRP, BGP</text>
-      <text class="t" x="330" y="82" fill="#8fa898" font-size="11">Routers exchange & learn routes</text>
-      <text class="t" x="330" y="102" fill="#8fa898" font-size="11">Self-heals around failures</text>
+      <text class="t" x="330" y="62" fill="#aab4cc" font-size="11">RIP, OSPF, EIGRP, BGP</text>
+      <text class="t" x="330" y="82" fill="#aab4cc" font-size="11">Routers exchange & learn routes</text>
+      <text class="t" x="330" y="102" fill="#aab4cc" font-size="11">Self-heals around failures</text>
     </svg>`,
     points:["BGP is the protocol that runs the entire internet's inter-network routing — a BGP hijack (announcing routes you don't own) can redirect huge amounts of traffic, and has been used in real-world attacks.","Dynamic routing protocols without authentication can be manipulated by an attacker on the network to reroute or blackhole traffic.","In smaller or segmented networks, static routes are often preferred specifically because they're predictable and can't be silently changed by a rogue device."],
   },
@@ -1139,13 +1178,13 @@ const NETWORKING = [
     name:"MTU, Fragmentation & QoS",
     desc:"MTU defines the largest packet a link can carry without breaking it up. Fragmentation and Quality of Service both affect performance — and both have been used in real attacks.",
     diagram:`<svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;}</style>
       <rect class="box" x="15" y="20" width="180" height="40" rx="4"/><text class="t" x="30" y="45">Oversized packet</text>
-      <text class="t" x="230" y="45" fill="#00ff41">→ fragmented into →</text>
+      <text class="t" x="230" y="45" fill="#2f7dff">→ fragmented into →</text>
       <rect class="box" x="400" y="10" width="60" height="24" rx="3"/><text class="t" x="410" y="26" font-size="10">Frag 1</text>
       <rect class="box" x="400" y="40" width="60" height="24" rx="3"/><text class="t" x="410" y="56" font-size="10">Frag 2</text>
       <rect class="box" x="470" y="10" width="60" height="24" rx="3"/><text class="t" x="480" y="26" font-size="10">Frag 3</text>
-      <text class="t" x="15" y="100" fill="#8fa898" font-size="11">Default Ethernet MTU: 1500 bytes — larger payloads must fragment or use jumbo frames</text>
+      <text class="t" x="15" y="100" fill="#aab4cc" font-size="11">Default Ethernet MTU: 1500 bytes — larger payloads must fragment or use jumbo frames</text>
     </svg>`,
     points:["Fragmentation attacks (like teardrop, or crafted overlapping fragments) exploit how systems reassemble packets — a known historical DoS technique.","Firewalls and IDS that don't reassemble fragments properly can be evaded by attackers deliberately splitting malicious payloads across fragments.","QoS prioritizes certain traffic (like VoIP) over others — misconfigured QoS can itself become a denial-of-service vector by starving legitimate traffic."],
   },
@@ -1153,16 +1192,16 @@ const NETWORKING = [
     name:"DMZ — Demilitarized Zone",
     desc:"A DMZ is a network segment that sits between the untrusted internet and the trusted internal network, hosting public-facing services while keeping them isolated from sensitive internal systems.",
     diagram:`<svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;} .dmz{fill:rgba(255,189,46,0.08);stroke:#ffbd2e;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;} .dmz{fill:rgba(255,189,46,0.08);stroke:#ffbd2e;}</style>
       <rect class="box" x="10" y="55" width="110" height="50" rx="5"/><text class="t" x="25" y="83">Internet</text>
       <rect class="dmz" x="230" y="20" width="160" height="120" rx="6"/>
       <text class="t" x="245" y="42" fill="#ffbd2e" font-weight="700">DMZ</text>
-      <text class="t" x="245" y="65" font-size="10" fill="#8fa898">Web server</text>
-      <text class="t" x="245" y="85" font-size="10" fill="#8fa898">Mail server</text>
-      <text class="t" x="245" y="105" font-size="10" fill="#8fa898">Public DNS</text>
-      <rect class="box" x="500" y="55" width="110" height="50" rx="5"/><text class="t" x="510" y="78" font-size="11">Internal LAN</text><text class="t" x="510" y="94" font-size="9" fill="#8fa898">Databases, staff</text>
-      <line x1="120" y1="80" x2="230" y2="80" stroke="#00ff41"/>
-      <line x1="390" y1="80" x2="500" y2="80" stroke="#00ff41"/>
+      <text class="t" x="245" y="65" font-size="10" fill="#aab4cc">Web server</text>
+      <text class="t" x="245" y="85" font-size="10" fill="#aab4cc">Mail server</text>
+      <text class="t" x="245" y="105" font-size="10" fill="#aab4cc">Public DNS</text>
+      <rect class="box" x="500" y="55" width="110" height="50" rx="5"/><text class="t" x="510" y="78" font-size="11">Internal LAN</text><text class="t" x="510" y="94" font-size="9" fill="#aab4cc">Databases, staff</text>
+      <line x1="120" y1="80" x2="230" y2="80" stroke="#2f7dff"/>
+      <line x1="390" y1="80" x2="500" y2="80" stroke="#2f7dff"/>
     </svg>`,
     points:["If a DMZ web server is compromised, the whole point is that the attacker still can't directly reach the internal LAN without crossing another firewall boundary.","A poorly configured DMZ — one with unrestricted access back to internal systems — defeats its own purpose and is a common finding in network security reviews.","Modern cloud architectures replicate this same idea with public/private subnets and security groups instead of a physical DMZ segment."],
   },
@@ -1170,7 +1209,7 @@ const NETWORKING = [
     name:"Port Scanning Techniques",
     desc:"Not all scans work the same way. Different scan types trade off speed, stealth, and reliability — and understanding them is core to both offensive recon and detecting recon against you.",
     diagram:`<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;fill:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#ffffff;} .row{fill:rgba(47,125,255,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;fill:#2f7dff;}</style>
       ${[
         ["TCP Connect","Completes full handshake — reliable, but noisy & logged"],
         ["SYN (half-open)","Sends SYN, drops before ACK — faster, stealthier"],
@@ -1179,7 +1218,7 @@ const NETWORKING = [
       ].map((r,i)=>`
         <rect class="row" x="10" y="${10+i*42}" width="580" height="36" rx="4"/>
         <text class="p" x="24" y="${33+i*42}">${r[0]}</text>
-        <text class="t" x="200" y="${33+i*42}" fill="#8fa898">${r[1]}</text>
+        <text class="t" x="200" y="${33+i*42}" fill="#aab4cc">${r[1]}</text>
       `).join('')}
     </svg>`,
     points:["A SYN scan is Nmap's default (-sS) specifically because it's faster and leaves fewer complete-connection logs than a full connect scan.","FIN/Xmas/Null scans exploit how some older or misconfigured stacks respond to unexpected flag combinations — many modern systems aren't fooled anymore.","From the defensive side, a burst of half-open connections or odd flag combinations hitting many ports in sequence is a textbook IDS signature for 'someone is scanning us.'"],
@@ -1188,9 +1227,9 @@ const NETWORKING = [
     name:"Packet Sniffing & Analysis",
     desc:"Capturing and reading raw traffic is one of the most fundamental skills in both offense and defense — it's how you verify what's actually happening on the wire, not what you assume is happening.",
     diagram:`<svg viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;}</style>
       <rect class="box" x="10" y="15" width="580" height="90" rx="6"/>
-      <text class="t" x="25" y="38" fill="#00ff41" font-weight="700">Wireshark filter examples:</text>
+      <text class="t" x="25" y="38" fill="#2f7dff" font-weight="700">Wireshark filter examples:</text>
       <text class="t" x="25" y="58">tcp.flags.syn==1 &amp;&amp; tcp.flags.ack==0</text>
       <text class="t" x="25" y="76">http.request.method=="POST"</text>
       <text class="t" x="25" y="94">ip.addr==192.168.1.5 &amp;&amp; dns</text>
@@ -1201,7 +1240,7 @@ const NETWORKING = [
     name:"DDoS Attack Types",
     desc:"Denial-of-service attacks aim to exhaust a target's resources rather than breach it. They break down into three broad categories, each attacking a different layer.",
     diagram:`<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .row{fill:rgba(0,255,65,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#00ff41;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .row{fill:rgba(47,125,255,0.04);stroke:#123322;} .p{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;fill:#2f7dff;}</style>
       ${[
         ["Volumetric","Floods raw bandwidth","UDP flood, DNS/NTP amplification"],
         ["Protocol","Exhausts server/connection state","SYN flood, ping of death"],
@@ -1209,8 +1248,8 @@ const NETWORKING = [
       ].map((r,i)=>`
         <rect class="row" x="10" y="${10+i*48}" width="580" height="42" rx="4"/>
         <text class="p" x="24" y="${36+i*48}">${r[0]}</text>
-        <text class="t" x="180" y="${30+i*48}" fill="#8fa898" font-size="11">${r[1]}</text>
-        <text class="t" x="180" y="${46+i*48}" fill="#8fa898" font-size="10">${r[2]}</text>
+        <text class="t" x="180" y="${30+i*48}" fill="#aab4cc" font-size="11">${r[1]}</text>
+        <text class="t" x="180" y="${46+i*48}" fill="#aab4cc" font-size="10">${r[2]}</text>
       `).join('')}
     </svg>`,
     points:["Volumetric attacks are measured in Gbps/Tbps and typically mitigated upstream by ISPs or scrubbing services — a single server can't absorb them.","Application-layer DDoS is harder to detect because the requests look legitimate; it's usually caught by rate-limiting, WAF rules, and behavioral analysis rather than raw traffic volume.","Botnets (networks of compromised devices, notably IoT devices in attacks like Mirai) are the typical source of large-scale volumetric DDoS traffic."],
@@ -1219,15 +1258,15 @@ const NETWORKING = [
     name:"Zero Trust Architecture",
     desc:"Zero Trust flips the old model of 'trust everything inside the perimeter' to 'verify every request, every time, regardless of where it comes from.' It's the direction most modern enterprise security is moving toward.",
     diagram:`<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.05);stroke:#00ff41;} .old{fill:rgba(255,59,59,0.06);stroke:#ff3b3b;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:12px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.05);stroke:#2f7dff;} .old{fill:rgba(255,59,59,0.06);stroke:#ff3b3b;}</style>
       <text class="t" x="15" y="18" fill="#ff3b3b">Old model — trust the perimeter</text>
       <rect class="old" x="15" y="28" width="260" height="50" rx="6"/>
       <text class="t" x="30" y="58" font-size="11">Inside firewall = trusted, full access</text>
-      <text class="t" x="330" y="18" fill="#00ff41">Zero Trust — verify every request</text>
+      <text class="t" x="330" y="18" fill="#2f7dff">Zero Trust — verify every request</text>
       <rect class="box" x="330" y="28" width="260" height="50" rx="6"/>
       <text class="t" x="345" y="50" font-size="11">Every request authenticated,</text>
       <text class="t" x="345" y="66" font-size="11">authorized, and encrypted — always</text>
-      <text class="t" x="15" y="115" fill="#8fa898" font-size="11">Core idea: "never trust, always verify" — even for traffic already inside the network</text>
+      <text class="t" x="15" y="115" fill="#aab4cc" font-size="11">Core idea: "never trust, always verify" — even for traffic already inside the network</text>
     </svg>`,
     points:["Zero Trust assumes breach — the question isn't 'did the attacker get past the firewall' but 'what can they actually reach once they're in,' which is why it pairs so closely with segmentation and least-privilege access.","Multi-factor authentication, micro-segmentation, and continuous verification (not just login-time checks) are the practical building blocks of a Zero Trust deployment.","This model exists specifically because MITM, insider threats, and lateral movement all rely on the old assumption that 'inside the network' means 'safe' — Zero Trust removes that assumption entirely."],
   },
@@ -1235,13 +1274,13 @@ const NETWORKING = [
     name:"SIEM & Centralized Logging",
     desc:"A SIEM aggregates logs from across an entire environment — firewalls, servers, endpoints — into one place to correlate events and spot patterns no single log source would reveal alone.",
     diagram:`<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#e6f5e9;} .box{fill:rgba(0,255,65,0.06);stroke:#00ff41;} .ln{stroke:#00ff41;stroke-width:1;}</style>
+      <style>.t{font-family:'JetBrains Mono',monospace;font-size:11px;fill:#ffffff;} .box{fill:rgba(47,125,255,0.06);stroke:#2f7dff;} .ln{stroke:#2f7dff;stroke-width:1;}</style>
       ${[["Firewall",10],["Servers",130],["Endpoints",250],["Cloud apps",370]].map(s=>`
         <rect class="box" x="${s[1]}" y="10" width="100" height="35" rx="4"/><text class="t" x="${s[1]+10}" y="32" font-size="10">${s[0]}</text>
         <line class="ln" x1="${s[1]+50}" y1="45" x2="300" y2="100" marker-end="url(#a11)"/>
       `).join('')}
-      <rect class="box" x="220" y="100" width="160" height="50" rx="6"/><text class="t" x="235" y="130" fill="#00ff41" font-weight="700">SIEM</text>
-      <defs><marker id="a11" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#00ff41"/></marker></defs>
+      <rect class="box" x="220" y="100" width="160" height="50" rx="6"/><text class="t" x="235" y="130" fill="#2f7dff" font-weight="700">SIEM</text>
+      <defs><marker id="a11" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#2f7dff"/></marker></defs>
     </svg>`,
     points:["Tools like Splunk, ELK, and QRadar are the industry-standard SIEM platforms — SOC analysts spend most of their day working inside one.","Correlation rules are what turn raw logs into alerts — e.g. a failed login from five countries in ten minutes is only meaningful once logs are aggregated and compared.","Syslog is the common standard many devices use to ship logs to a central collector — understanding it is foundational to setting up any centralized monitoring."],
   },
@@ -1390,8 +1429,8 @@ document.getElementById('domainSearch').addEventListener('input', (e) => {
       const x = i * 18;
       const y = drops[i] * 18;
       const grad = ctx.createLinearGradient(0, y - 40, 0, y);
-      grad.addColorStop(0, 'rgba(0,255,65,0)');
-      grad.addColorStop(1, 'rgba(0,255,65,0.85)');
+      grad.addColorStop(0, 'rgba(47,125,255,0)');
+      grad.addColorStop(1, 'rgba(47,125,255,0.85)');
       ctx.fillStyle = grad;
       ctx.fillText(text, x, y);
       if(y > h && Math.random() > 0.975){
@@ -1441,6 +1480,15 @@ closeNetworking.addEventListener('click', () => {
   closeNetworkingSection();
   document.getElementById('tools').scrollIntoView({behavior:'smooth'});
 });
+
+/* ---------- SCROLL REVEAL ---------- */
+document.querySelectorAll('.tool-card').forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i%8)*0.05 + 's'; });
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ entry.target.classList.add('in'); revealObserver.unobserve(entry.target); }
+  });
+}, {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
 
 /* ---------- MOBILE NAV ---------- */
 const hamburgerBtn = document.getElementById('hamburgerBtn');
