@@ -1,16 +1,14 @@
+# 👋 Hi, I'm Harsh Saini (MR Cyber Pulse)
 
-# MR Harsh saini
-# 👋 Hi, I'm Harsh Saini
-
-### 🔐 OSINT | Cyber Security | Ethical Hacking | Bio-Cyber | IoT Security
+### 🛡️ GRC & Defensive Security | AI Red Teaming | OSINT | Building Practical Tools
 
 ---
 
 ## 🧠 About Me
 
-I am a **Builder & Explorer** — someone who turns complexity into clarity.  
-I work at the intersection of **Cyber Security, OSINT, and Bio-Cyber**.  
-I don't chase fame — I chase patterns, logic, and building systems that last.
+I am a **Builder & Explorer** — turning complexity into clarity.  
+I work at the intersection of **GRC (Governance, Risk, Compliance), AI Security, and Digital Intelligence**.  
+I don't chase fame — I build systems, document frameworks, and solve real-world problems with a no-jargon approach.
 
 > *"Complex ko simple. Simple ko powerful."*
 
@@ -18,25 +16,32 @@ I don't chase fame — I chase patterns, logic, and building systems that last.
 
 ## 🛠️ What I Do
 
-- **OSINT & Intelligence Gathering** — 4+ years of digital footprint analysis
-- **Cyber Security** — Kali Linux, Cisco, Wireshark, Ethical Hacking
-- **IoT Security** — IoT Security Analyst
-- **Bio-Cyber** — Biology + Cyber Security fusion
-- **Tool Building** — MR OSINT Tool (in progress)
+- **GRC & Compliance** — ISO 27001, DPDP Act 2023, CERT-In Guidelines, Risk Assessment & Auditing
+- **AI Red Teaming** — Prompt Injection, Data Poisoning, LLM Security & Safety Testing
+- **Defensive Security & OSINT** — Threat Intelligence, Digital Footprint Analysis, Vulnerability Assessment
+- **Tool Building** — Building practical GRC dashboards and compliance trackers for the Indian ecosystem (MR Cyber Pulse App - In Progress)
+
+---
+
+## 📚 Featured Projects & Research
+
+- 📖 **ISO 27001:2022 Core Foundation Notes** — Complete GRC Study Material (Vol. 01)
+- 📘 **RAND Source Commands** — A Practical Guide to Entropy & Cryptography in Cybersecurity
 
 ---
 
 ## 📫 Connect With Me
 
-**📩 For Sponsorship & Collaboration:**
+**📩 For Sponsorship, Consulting & Collaboration:**
 
 - **Manager:** Prachi Sharma
 - **Email:** manager.prachi@zohomail.in
 
-**📩 For Direct Contact:**
+**📩 For Direct Professional Inquiries:**
 
 - **Email:** cyber.h4rsh@zohomail.in
 - **Website:** [mrcyberharsh.github.io](https://mrcyberharsh.github.io/mrcyber/)
+- **LinkedIn:** [Harsh Saini](https://www.linkedin.com/in/harsh-saini-mrcyberpulse/) *(apna actual LinkedIn link daal dena yahan)*
 
 ---
 
@@ -46,4 +51,4 @@ I don't chase fame — I chase patterns, logic, and building systems that last.
 
 ---
 
-**— Harsh Saini (MR HARSH | Codename: HARRY)**
+**— Harsh Saini (MR Cyber Pulse | Codename: HARRY)**
