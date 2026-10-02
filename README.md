@@ -41,7 +41,7 @@ I don't chase fame — I build systems, document frameworks, and solve real-worl
 
 - **Email:** cyber.h4rsh@zohomail.in
 - **Website:** [mrcyberharsh.github.io](https://mrcyberharsh.github.io/mrcyber/)
-- **LinkedIn:** [Harsh Saini](https://www.linkedin.com/in/harsh-saini-mrcyberpulse/) *(apna actual LinkedIn link daal dena yahan)*
+- **LinkedIn:** [Harsh Saini](https://www.linkedin.com/in/harsh-saini-mrcyberpulse/) *(https://www.linkedin.com/in/harsh-saini-a7866641b)*
 
 ---
 
