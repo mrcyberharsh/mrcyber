@@ -1,54 +1,45 @@
-# 👋 Hi, I'm Harsh Saini (MR Cyber Pulse)
+# Hi, I'm Harsh Saini — MR CYBER PULSE
 
-### 🛡️ GRC & Defensive Security | AI Red Teaming | OSINT | Building Practical Tools
+**GRC & Defensive Security · OSINT · AI Security · Practical Tool Development**
 
----
+> Complex ko simple. Simple ko powerful.
 
-## 🧠 About Me
+## About
 
-I am a **Builder & Explorer** — turning complexity into clarity.  
-I work at the intersection of **GRC (Governance, Risk, Compliance), AI Security, and Digital Intelligence**.  
-I don't chase fame — I build systems, document frameworks, and solve real-world problems with a no-jargon approach.
+I enjoy turning complex technical topics into practical tools, clear documentation, and accessible learning resources. My interests include governance, risk and compliance (GRC), defensive cybersecurity, OSINT, and AI security.
 
-> *"Complex ko simple. Simple ko powerful."*
+## Focus areas
 
----
+- **GRC and compliance:** security governance, risk assessment, control mapping, and security awareness.
+- **Defensive security:** asset visibility, security configuration reviews, and vulnerability management concepts.
+- **OSINT:** responsible use of public information and technical metadata.
+- **AI security:** learning about prompt-injection risks, model evaluation, and safer AI systems.
+- **Open-source tools:** building small utilities and documenting practical workflows.
 
-## 🛠️ What I Do
+## Selected projects
 
-- **GRC & Compliance** — ISO 27001, DPDP Act 2023, CERT-In Guidelines, Risk Assessment & Auditing
-- **AI Red Teaming** — Prompt Injection, Data Poisoning, LLM Security & Safety Testing
-- **Defensive Security & OSINT** — Threat Intelligence, Digital Footprint Analysis, Vulnerability Assessment
-- **Tool Building** — Building practical GRC dashboards and compliance trackers for the Indian ecosystem (MR Cyber Pulse App - In Progress)
+| Project | What it is |
+|---|---|
+| [pulse-infragraph](https://github.com/mrcyberharsh/pulse-infragraph) | Open-source attack-surface visibility and asset graph project |
+| [IoT Hunter](https://github.com/mrcyberharsh/iot-hunter) | Defensive IoT inventory and security review toolkit |
+| [SMB Sentinel](https://github.com/mrcyberharsh/smb-sentinel) | SMB configuration review utility |
+| [MR OSINT Toolkit](https://github.com/mrcyberharsh/mr-osint-toolkit) | Local, passive OSINT utility collection |
+| [MR OSINT Media Toolkit](https://github.com/mrcyberharsh/mr-osint-media-toolkit) | Media metadata and privacy inspection utility |
+| [Linux Command Sheet](https://github.com/mrcyberharsh/linux-cmd-sheet) | Categorized Linux reference for cybersecurity learners |
+| [Security+ Notes](https://github.com/mrcyberharsh/comptia-security-plus-notes) | Plain-language SY0-701 study notes |
 
----
+Project capabilities and status can change; each repository README is the source of truth for its current state.
 
-## 📚 Featured Projects & Research
+## Learning and collaboration
 
-- 📖 **ISO 27001:2022 Core Foundation Notes** — Complete GRC Study Material (Vol. 01)
-- 📘 **RAND Source Commands** — A Practical Guide to Entropy & Cryptography in Cybersecurity
+I welcome constructive feedback, documentation improvements, bug reports, and responsible open-source collaboration. When reporting an issue, include reproducible steps and remove secrets or private information from logs.
 
----
+## Connect
 
-## 📫 Connect With Me
-
-**📩 For Sponsorship, Consulting & Collaboration:**
-
-- **Manager:** Prachi Sharma
-- **Email:** manager.prachi@zohomail.in
-
-**📩 For Direct Professional Inquiries:**
-
-- **Email:** cyber.h4rsh@zohomail.in
-- **Website:** [mrcyberharsh.github.io](https://mrcyberharsh.github.io/mrcyber/)
-- **LinkedIn:** [Harsh Saini](https://www.linkedin.com/in/harsh-saini-mrcyberpulse/) *(https://www.linkedin.com/in/harsh-saini-a7866641b)*
+- **GitHub:** https://github.com/mrcyberharsh
+- **Website:** https://mrcyberharsh.github.io/mrcyber/
+- **Professional inquiries:** cyber.h4rsh@zohomail.in
 
 ---
 
-## 🗿 Philosophy
-
-> *"Complex ko simple. Simple ko powerful."*
-
----
-
-**— Harsh Saini (MR Cyber Pulse | Codename: HARRY)**
+*MR CYBER PULSE · Build, learn, document, improve.*
